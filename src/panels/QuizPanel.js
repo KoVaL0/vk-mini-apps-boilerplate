@@ -63,12 +63,12 @@ class Home extends React.Component {
             </Title>
           </Div>
           <Div style={{display: "flex", justifyContent: "space-around"}}>
-            <div style={{display: "flex", alignItems: "center"}}>
-              <Icon56InfoOutline width={24} height={24}/>
+            <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
+              <Icon56InfoOutline width={18} height={18} style={{marginRight: "8px"}}/>
               {this.quiz.questions.length} вопросов
             </div>
-            <div style={{display: "flex", alignItems: "center"}}>
-              <Icon56RecentOutline width={24} height={24}/>
+            <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
+              <Icon56RecentOutline width={18} height={18} style={{marginRight: "8px"}}/>
               {this.quiz.questions.length * 3 / 6} мин.
             </div>
           </Div>

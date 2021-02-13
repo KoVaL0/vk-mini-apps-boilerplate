@@ -57,7 +57,7 @@ class AboutCard extends Component {
         this.setState({slideIndex: this.state.slideIndex + 1})
       } else if (type !== "multi") {
         this.setState({slideIndex: this.state.slideIndex + 1})
-      } else return console.log("!!!!!!!!!!!!")
+      } else return console.log("Нет ответа!")
     } else if (this.quiz.questions.length - 1 === i && this.answer === true) {
       axios.post() // Указать url отправки ответа
         .then(() => {
@@ -152,7 +152,7 @@ class AboutCard extends Component {
                 <div key={i}>
                   <Text align={"center"}>{item.title}</Text>
                   {this.props.snackbar}
-                  <Group style={{padding: "20px 40px"}}>
+                  <Group style={{padding: "20px 0"}}>
                     {item.answer.map((answer, i) => (
                       <>
                         {(item.type === "single") ? (
