@@ -2,7 +2,7 @@ import MainPanel from "../panels/MainPanel";
 import { withRouter } from '@happysanta/router';
 import React, { Component } from "react";
 import { View } from "@vkontakte/vkui";
-import {PANEL_MAIN, PANEL_QUIZ} from "./../router";
+import {PANEL_MAIN, PANEL_QUIZ, VIEW_MAIN} from "./../router";
 import QuizPanel from "../panels/QuizPanel";
 
 class Main extends Component {
@@ -24,4 +24,4 @@ class Main extends Component {
   }
 }
 
-export default WithRouter(Main);
+export default withRouter(Main);
