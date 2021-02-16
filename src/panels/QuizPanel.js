@@ -7,7 +7,6 @@ import {
   PanelHeaderButton,
   Title,
   Button,
-  Group,
   Div,
   CardGrid, ScreenSpinner,
 } from "@vkontakte/vkui";
@@ -26,7 +25,9 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = state
-    this.quiz = this.state.quiz[window.location.hash.split("/")[2]]
+    this.quiz = this.state.quiz[window.location.hash.split("/")[2].split("?")[0]]
+    console.log(this.quiz.header)
+    console.log("this.quiz.image")
   }
 
   render() {
@@ -79,7 +80,7 @@ class Home extends React.Component {
         </div>
         <Div align={"center"}>
           <Button
-            stretched
+            stretched={"true"}
             size="l"
             mode={"commerce"}
             onClick={() => {

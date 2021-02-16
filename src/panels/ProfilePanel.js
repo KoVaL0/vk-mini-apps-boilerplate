@@ -1,6 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import {
   Panel,
   PanelHeader,
@@ -8,14 +8,15 @@ import {
   Placeholder,
   PanelSpinner,
 } from "@vkontakte/vkui";
-import { withRouter } from "@happysanta/router";
-import { MODAL_ABOUT } from "../router";
+import {withRouter} from "@happysanta/router";
+import {MODAL_ABOUT} from "../router";
 import "./home.css";
-import { Icon24GearOutline } from "@vkontakte/icons";
+import {Icon24GearOutline} from "@vkontakte/icons";
 import hi from "../img/hi.png";
+
 class Home extends React.Component {
   render() {
-    const { id, router, participantInfo } = this.props;
+    const {id, router, participantInfo} = this.props;
 
     return (
       <Panel id={id}>
@@ -29,7 +30,7 @@ class Home extends React.Component {
                 router.pushModal(MODAL_ABOUT)
               }
             >
-              <Icon24GearOutline />
+              <Icon24GearOutline/>
             </PanelHeaderButton>
           }
         >
@@ -37,16 +38,16 @@ class Home extends React.Component {
         </PanelHeader>
         {participantInfo !== null && participantInfo !== "error" && (
           <Placeholder
-            icon={<img alt="Заглушка" className="emoji-placeholder" src={hi} />}
+            icon={<img alt="Заглушка" className="emoji-placeholder" src={hi}/>}
             header="Профиль"
           >
             Профиль
           </Placeholder>
         )}
-        {participantInfo === null && <PanelSpinner />}
+        {participantInfo === null && <PanelSpinner/>}
         {participantInfo === "error" && (
           <Placeholder
-            icon={<img alt="Заглушка" className="emoji-placeholder" src={hi} />}
+            icon={<img alt="Заглушка" className="emoji-placeholder" src={hi}/>}
             header="Ошибка"
           >
             Упс, попробуйте обновить
@@ -59,7 +60,7 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    participantInfo: { kek: 1 },
+    participantInfo: {kek: 1},
   };
 };
 

@@ -42,7 +42,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const {id, profile, router, notifications} = this.props;
+    const {id, profile, router, notifications, ...rest} = this.props;
 
     return (
       <Panel id={id}>
@@ -64,6 +64,7 @@ class Home extends React.Component {
         <div>
           <div className="d-row" style={{marginTop: "16px"}}>
             <img
+              alt="profile_img"
               className="profile__photo"
               src={profile.photo_200}
             />
@@ -91,9 +92,9 @@ class Home extends React.Component {
                       {(quiz.type === "reusable") ? (
                         <ContentCard
                           image={quiz.image}
+                          height={100}
                           header={quiz.header}
                           text={quiz.text}
-                          maxHeight={100}
                           onClick={() => {
                             this.props.setActiveQuiz(quiz.id)
                             router.pushPage(PAGE_QUIZ, {id: quiz.id})
@@ -109,7 +110,7 @@ class Home extends React.Component {
                           <Div>
                             <Button
                               size="s"
-                              stretched
+                              stretched={"true"}
                               style={{margin: '0px auto 16px auto', minHeight: "36px"}}
                               onClick={() => (this.removeItem(id))}
                             >
@@ -117,7 +118,7 @@ class Home extends React.Component {
                             </Button>
                             <Button
                               size="s"
-                              stretched
+                              stretched={"true"}
                               style={{margin: '0px auto 16px auto', minHeight: "36px"}}
                               onClick={() => (this.removeItem(id))}
                             >
@@ -125,7 +126,7 @@ class Home extends React.Component {
                             </Button>
                             <Button
                               size="s"
-                              stretched
+                              stretched={"true"}
                               style={{margin: '0px auto 16px auto', minHeight: "36px"}}
                               onClick={() => (this.removeItem(id))}
                             >
@@ -154,7 +155,7 @@ class Home extends React.Component {
                     <Text
                       className="history__count history-action"
                       weight="medium"
-                      style={{color: "#fff",margin: "8px 0"}}
+                      style={{color: "#fff", margin: "8px 0"}}
                     >
                       {this.props.notifications
                         ? 'Уведомления выключены'
@@ -162,7 +163,7 @@ class Home extends React.Component {
                     </Text>
                     <Button
                       size="s"
-                      stretched
+                      stretched={"true"}
                       className="action-button"
                       onClick={() => {
                         this.props.setNotifications(!this.props.notifications)
