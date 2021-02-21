@@ -5,20 +5,26 @@ import {
   Panel,
   PanelHeader,
   PanelHeaderButton,
-  Placeholder,
-  PanelSpinner, Title, Text, Link, Div, Caption, Button, Card, Header, Group,
+  Title,
+  Text,
+  Link,
+  Div,
+  Caption,
+  Button,
+  Card,
+  Header,
+  Group,
 } from "@vkontakte/vkui";
 import {withRouter} from "@happysanta/router";
-import {MODAL_ABOUT, MODAL_PAY, MODAL_SETTINGS, PAGE_MAIN, POPOUT_CONFIRM} from "../router";
+import {MODAL_PAY, MODAL_SETTINGS, PAGE_MAIN} from "../router";
 import "./home.css";
-import {Icon12ChevronOutline, Icon20UsersOutline, Icon24BrowserBack, Icon24GearOutline} from "@vkontakte/icons";
-import hi from "../img/hi.png";
+import {Icon12ChevronOutline, Icon20UsersOutline, Icon24BrowserBack} from "@vkontakte/icons";
 import logo from "../img/logo.png";
 import {setNotifications} from "../store/data/actions";
 
 class Home extends React.Component {
   render() {
-    const {id, profile, router, notifications, participantInfo} = this.props;
+    const {id, profile, router, notifications} = this.props;
 
     return (
       <Panel id={id}>
@@ -96,8 +102,8 @@ class Home extends React.Component {
                 style={{color: "#8f99a4"}}>
                 {
                   this.props.profile.sex === 1 ? ("Женский") :
-                  (this.props.profile.sex === 2) ? ("Мужской") :
-                    ("Пол не указан")
+                    (this.props.profile.sex === 2) ? ("Мужской") :
+                      ("Пол не указан")
                 }
                 <Icon12ChevronOutline/>
               </Link>

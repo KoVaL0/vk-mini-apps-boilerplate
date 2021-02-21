@@ -41,7 +41,7 @@ class SettingsModalCard extends Component {
           <FormItem top="Страна">
             <Select
               onChange={(e) => {this.country = e.target.value}}
-              placeholder={this.country}
+              placeholder="Выберите страну"
               options={[{
                 value: 'Россия', label: 'Россия'
               }, {
@@ -53,7 +53,7 @@ class SettingsModalCard extends Component {
           <FormItem top="Город">
             <Select
               onChange={(e) => {this.city = e.target.value}}
-              placeholder={this.city}
+              placeholder="Выберите город"
               options={[{
                 value: 'Москва', label: 'Москва'
               }, {
@@ -64,14 +64,12 @@ class SettingsModalCard extends Component {
           </FormItem>
           <FormItem top="Пол" style={{marginBottom: "3%"}}>
             <Select
-              onChange={(e) => {this.sex = e.target.value}}
-              placeholder={this.sex === 1 ? ("Женский") :
-                (this.sex === 2) ? ("Мужской") :
-                  ("Пол не указан")}
+              onChange={(e) => {this.sex = +e.target.value}}
+              placeholder="Выберите пол"
               options={[{
-                value: '0', label: 'Мужской'
+                value: 2, label: 'Мужской'
               }, {
-                value: '1', label: 'Женский'
+                value: 1, label: 'Женский'
               }
               ]}
             />
