@@ -3,12 +3,15 @@ import {
   SET_SNACKBAR,
   SET_IS_NOTIFICATIONS_ENABLED,
   SET_IS_ONBOARDING_VIEWED,
-  SET_PARTICIPATION_STATUS,
-  SET_PARTICIPANT_INFO,
-  SET_ABOUT,
   SET_NOTIFICATIONS,
   SET_PROFILE,
-  SET_ACTIVE_QUIZ, SET_ACTIVE_ANSWER,
+  SET_ACTIVE_QUIZ,
+  SET_ACTIVE_ANSWER,
+  SET_DATA,
+  SET_BLOCK_VIEW,
+  SET_CITY,
+  SET_SEX,
+  SET_COUNTRY,
 } from "./actionTypes";
 
 const initialState = {
@@ -16,9 +19,33 @@ const initialState = {
   isOnboardingViewed: true,
   isNotificationsEnabled: false,
   snackbar: null,
-  profile: {},
+  profile: {
+    city: null,
+    country: null,
+    sex: 0,
+  },
+  blockView: true,
   activeAnswer: null,
   activeQuiz: null,
+  data: {
+    slideIndex: null,
+    quiz: [
+      {
+        id: null,
+        type: null,
+        image: null,
+        header: null,
+        text: null,
+        questions: [
+          {
+            type: null,
+            title: null,
+            answer: [null]
+          }
+        ]
+      },
+    ]
+  }
 };
 
 export const dataReducer = (state = initialState, action) => {
@@ -53,30 +80,28 @@ export const dataReducer = (state = initialState, action) => {
         profile: action.payload.data,
       };
     }
-
-
     case SET_NOTIFICATIONS: {
       return {
         ...state,
         notifications: action.payload.data,
       };
     }
-    case SET_ABOUT: {
+    case SET_COUNTRY: {
       return {
         ...state,
-        about: action.payload.data,
+        profile: {...state.profile, country: {title: action.payload.data}},
       };
     }
-    case SET_PARTICIPANT_INFO: {
+    case SET_SEX: {
       return {
         ...state,
-        participantInfo: action.payload.data,
+        profile: {...state.profile, sex: action.payload.data},
       };
     }
-    case SET_PARTICIPATION_STATUS: {
+    case SET_CITY: {
       return {
         ...state,
-        participationStatus: action.payload.data,
+        profile: {...state.profile, city: {title: action.payload.data}},
       };
     }
     case SET_ACTIVE_QUIZ: {
@@ -89,6 +114,18 @@ export const dataReducer = (state = initialState, action) => {
       return {
         ...state,
         activeAnswer: action.payload.data,
+      };
+    }
+    case SET_DATA: {
+      return {
+        ...state,
+        data: action.payload.data,
+      };
+    }
+    case SET_BLOCK_VIEW: {
+      return {
+        ...state,
+        blockView: action.payload.data,
       };
     }
 

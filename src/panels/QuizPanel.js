@@ -11,20 +11,20 @@ import {
   CardGrid, ScreenSpinner,
 } from "@vkontakte/vkui";
 import {withRouter} from "@happysanta/router";
-import {MODAL_QUIZ, PAGE_MAIN, POPOUT_SPINNER} from "../router";
+import {MODAL_QUIZ, PAGE_MAIN, PAGE_QUIZ_CARD, POPOUT_SPINNER} from "../router";
 import "./quiz.css";
 import {
   Icon24BrowserBack,
   Icon56InfoOutline,
   Icon56RecentOutline
 } from "@vkontakte/icons";
-import {state} from "../store/state";
+import logo from "../img/logo.png";
 
 class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = state
+    this.state = this.props.data
     this.quiz = this.state.quiz[window.location.hash.split("/")[2].split("?")[0]]
     console.log(this.quiz.header)
     console.log("this.quiz.image")
@@ -52,7 +52,7 @@ class Home extends React.Component {
             </>
           }
         >
-          РосОпрос
+          <img alt='logo' src={logo} height={36} style={{margin: "0 auto"}}/>
         </PanelHeader>
         <div>
           <CardGrid size="l" className={"quiz-image"}
@@ -84,7 +84,7 @@ class Home extends React.Component {
             size="l"
             mode={"commerce"}
             onClick={() => {
-              router.pushModal(MODAL_QUIZ)
+              router.pushPage(PAGE_QUIZ_CARD)
             }}>
             Начать опрос
           </Button>
@@ -97,6 +97,7 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
   return {
     activeQuiz: state.data.activeQuiz,
+    data: state.data.data,
   };
 };
 

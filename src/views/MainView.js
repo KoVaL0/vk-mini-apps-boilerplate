@@ -2,8 +2,9 @@ import MainPanel from "../panels/MainPanel";
 import { withRouter } from '@happysanta/router';
 import React, { Component } from "react";
 import { View } from "@vkontakte/vkui";
-import {PANEL_MAIN, PANEL_QUIZ, VIEW_MAIN} from "./../router";
+import {PANEL_MAIN, PANEL_QUIZ, PANEL_QUIZ_CARD, VIEW_MAIN} from "./../router";
 import QuizPanel from "../panels/QuizPanel";
+import QuizCardPanel from "../panels/QuizCardPanel";
 
 class Main extends Component {
   render() {
@@ -19,6 +20,7 @@ class Main extends Component {
       >
         <MainPanel id={PANEL_MAIN} />
         <QuizPanel id={PANEL_QUIZ} />
+        <QuizCardPanel id={PANEL_QUIZ_CARD} />
       </View>
     );
   }

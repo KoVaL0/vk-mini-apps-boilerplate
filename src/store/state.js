@@ -10,7 +10,7 @@ export const state = {
       questions: [
         {
           type: "single",
-          title: "Сколько лет Навальному",
+          title: "Сколько лет Навальному?",
           answer: ["35 лет", "31 годик", "3.5 лет колонии"]
         },
         {
