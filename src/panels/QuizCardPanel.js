@@ -234,7 +234,7 @@ class QuizCardPanel extends React.Component {
                     level={"3"}
                     weight={"heavy"}
                     align={"center"}
-                    style={{color: "black", background: "#fff", margin: "0 80px", padding: "10px 0", borderRadius: "10px"}}>
+                    style={{color: "black", background: "#fff", margin: "0 10%", padding: "10px 0", borderRadius: "10px"}}>
                     {item.title}
                   </Title>
                   <Group style={{padding: "20px 0"}}>
@@ -245,10 +245,12 @@ class QuizCardPanel extends React.Component {
                             size="s"
                             mode={(this.props.activeAnswer === i) ? "commerce" : "overlay_primary"}
                             stretched={"true"}
-                            style={{marginBottom: "10px", minHeight: "36px", border: "1px #4986cc"}}
+                            style={{marginBottom: "10px", minHeight: "36px", border: "1px #4986cc", color: "#000000"}}
                             onClick={() => (this.handlerChangeSingle(i, answer))}
                           >
-                            {answer}
+                            <Text>
+                              {answer}
+                            </Text>
                           </Button>
                         ) : (item.type === "multi") ? (
                           <Checkbox
@@ -259,19 +261,21 @@ class QuizCardPanel extends React.Component {
                               minHeight: "36px",
                               border: "1px solid #4986cc",
                               background: "#fff",
-                              color: "black",
+                              color: "#000000",
                               borderRadius: "10px"
                             }}
                             onChange={(e) => (this.handlerChangeMulti(e.target.checked, i))}
                           >
-                            {answer}
+                            <Text>
+                              {answer}
+                            </Text>
                           </Checkbox>
                         ) : (item.type === "input") ? (
                           <Input
                             size="s"
                             stretched={"true"}
                             mode={(this.props.activeAnswer === i) ? "commerce" : "overlay_primary"}
-                            style={{marginBottom: "10px", minHeight: "36px"}}
+                            style={{marginBottom: "10px", minHeight: "36px", color: "#000000",}}
                             onChange={(e) => (this.handlerChangeInput(e.target.value))}
                             placeholder={answer}
                           />
@@ -281,10 +285,12 @@ class QuizCardPanel extends React.Component {
                             stretched={"true"}
                             size="s"
                             mode={(this.props.activeAnswer === i) ? "commerce" : "overlay_primary"}
-                            style={{marginBottom: "10px", minHeight: "36px"}}
+                            style={{marginBottom: "10px", minHeight: "36px", color: "#000000",}}
                             onChange={(e) => (this.handlerChangeFile(e.target.files[0]))}
                           >
-                            {answer}
+                            <Text>
+                              {answer}
+                            </Text>
                           </File>
                         ) : (item.type === "end") ? (
                           <Title

@@ -40,10 +40,10 @@ class Home extends React.Component {
   }
 
   render() {
-    const {id, profile, router, notifications, ...rest} = this.props;
+    const {id, router, notifications} = this.props;
     if (!notifications) {
-      this.state.blockView = true
-    }
+      this.props.setBlockView(true)
+    } else setTimeout(() => (this.props.setBlockView(false)),1000)
 
     return (
       <Panel id={id}>
