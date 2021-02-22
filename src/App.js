@@ -22,7 +22,8 @@ import {
   MODAL_HISTORY,
   POPOUT_SPINNER,
   MODAL_INFO,
-  MODAL_QUIZ, MODAL_PAY,
+  MODAL_QUIZ,
+  MODAL_PAY,
 } from "./router";
 import "./App.css";
 import { auth } from "./api";
@@ -32,12 +33,11 @@ import Confirm from "./components/ConfirmationPopout";
 import AboutModalCard from "./components/AboutModalCard";
 import HistoryModalPage from "./components/HistoryModalPage";
 import InfoModalCard from "./components/InfoModalCard";
-import {saveCredentials} from "./services";
-import {user} from "./api/rest/user";
-import { getProfile, setNotifications } from './store/data/actions';
+import { saveCredentials } from "./services";
+import { user } from "./api/rest/user";
+import { getProfile, setNotifications } from "./store/data/actions";
 import QuizModalCard from "./components/QuizModalCard";
 import PayModalCard from "./components/PayModalCard";
-
 
 class App extends React.Component {
   popout() {
@@ -51,15 +51,14 @@ class App extends React.Component {
 
   componentDidMount() {
     getUserInfo().then((res) => {
-      console.log(res)
-      this.props.getProfile(res)
+      console.log(res);
+      this.props.getProfile(res);
     });
-
 
     auth(window.location.search)
       .then(async (resp) => {
         saveCredentials(resp);
-        if ((await isIntroViewed()) === 'viewed') {
+        if ((await isIntroViewed()) === "viewed") {
           router.replacePage(PAGE_MAIN);
         } else {
           router.replacePage(PAGE_INTRO);
@@ -76,10 +75,10 @@ class App extends React.Component {
         onClose={() => router.popPage()}
         activeModal={location.getModalId()}
       >
-        <AboutModalCard id={MODAL_ABOUT} />
-        <PayModalCard id={MODAL_PAY} />
-        <InfoModalCard id={MODAL_INFO} />
-        <QuizModalCard id={MODAL_QUIZ} />
+        <AboutModalCard onClose={() => router.popPage()} id={MODAL_ABOUT} />
+        <PayModalCard onClose={() => router.popPage()} id={MODAL_PAY} />
+        <InfoModalCard onClose={() => router.popPage()} id={MODAL_INFO} />
+        <QuizModalCard onClose={() => router.popPage()} id={MODAL_QUIZ} />
         <HistoryModalPage onClose={() => router.popPage()} id={MODAL_HISTORY} />
       </ModalRoot>
     );
@@ -112,7 +111,7 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    ...bindActionCreators({ getProfile, setNotifications, }, dispatch),
+    ...bindActionCreators({ getProfile, setNotifications }, dispatch),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
