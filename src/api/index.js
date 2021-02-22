@@ -1,8 +1,5 @@
-import { auth } from './rest/auth';
-import { register, updateAbout } from './rest/reg';
-import { user } from './rest/user';
-import { updateNotifications } from './rest/notifications';
+import { auth } from "./rest/auth";
+import { poll } from "./rest/poll";
+import { polls } from "./rest/polls";
 
-
-export { auth, register, updateAbout, user, updateNotifications};
-
+export { auth, poll, polls };

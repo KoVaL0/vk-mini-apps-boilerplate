@@ -25,6 +25,10 @@ import {
   POPOUT_SPINNER,
   PAGE_PROFILE,
   VIEW_PROFILE,
+  MODAL_PAY,
+  MODAL_INFO,
+  MODAL_QUIZ,
+  MODAL_SETTINGS,
 } from "./router";
 import "./App.css";
 import { auth } from "./api";
@@ -41,9 +45,17 @@ import { Epic } from "@vkontakte/vkui/dist/components/Epic/Epic";
 import Profile from "./views/ProfileView";
 import IntroView from "./views/IntroView";
 import {
+  getProfile,
   setIsOnboardingViewed,
   setNotifications,
+  setData,
 } from "./store/data/actions";
+import PayModalCard from "./components/PayModalCard";
+import InfoModalCard from "./components/InfoModalCard";
+import QuizModalCard from "./components/QuizModalCard";
+import { state } from "./store/state";
+import SettingsModalCard from "./components/SettingsModalCard";
+import { polls } from "./api/rest/polls";
 
 class App extends React.Component {
   popout() {
@@ -56,14 +68,22 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    getUserInfo();
+    getUserInfo().then((res) => {
+      console.log(res);
+      this.props.getProfile(res);
+    });
+    auth(window.location.search).then((res) => {
+      localStorage.setItem("user_ro", res.data.result.token);
+      polls().then((res) => {
+        console.log(res);
+      });
+    });
+
     if ((await isIntroViewed()) === "viewed") {
       router.replacePage(PAGE_MAIN);
     } else {
       router.replacePage(PAGE_INTRO);
     }
-
-    auth(window.location.search);
   }
 
   render() {
@@ -75,6 +95,10 @@ class App extends React.Component {
         activeModal={location.getModalId()}
       >
         <AboutModalCard id={MODAL_ABOUT} />
+        <SettingsModalCard id={MODAL_SETTINGS} />
+        <PayModalCard id={MODAL_PAY} />
+        <InfoModalCard id={MODAL_INFO} />
+        <QuizModalCard id={MODAL_QUIZ} />
         <HistoryModalPage onClose={() => router.popPage()} id={MODAL_HISTORY} />
       </ModalRoot>
     );
@@ -89,21 +113,21 @@ class App extends React.Component {
                 tabbar={
                   <Tabbar>
                     <TabbarItem
-                      onClick={() => router.replacePage(PAGE_PROFILE)}
-                      selected={VIEW_PROFILE === location.getViewId()}
-                      data-story={VIEW_PROFILE}
-                      text="Главная"
-                    >
-                      <Icon28UserCircleOutline />
-                    </TabbarItem>
-
-                    <TabbarItem
                       onClick={() => router.replacePage(PAGE_MAIN)}
                       selected={VIEW_MAIN === location.getViewId()}
                       data-story={VIEW_MAIN}
-                      text="Новости"
+                      text="Опросы"
                     >
                       <Icon28NewsfeedOutline />
+                    </TabbarItem>
+
+                    <TabbarItem
+                      onClick={() => router.replacePage(PAGE_PROFILE)}
+                      selected={VIEW_PROFILE === location.getViewId()}
+                      data-story={VIEW_PROFILE}
+                      text="Профиль"
+                    >
+                      <Icon28UserCircleOutline />
                     </TabbarItem>
                   </Tabbar>
                 }
@@ -144,7 +168,7 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
     ...bindActionCreators(
-      { setIsOnboardingViewed, setNotifications },
+      { setIsOnboardingViewed, getProfile, setNotifications, setData },
       dispatch,
     ),
   };

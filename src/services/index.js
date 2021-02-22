@@ -1,4 +1,3 @@
-import { registerUser } from './registerUser';
-import { saveCredentials } from './saveCredentials';
+import { saveCredentials } from "./saveCredentials";
 
-export { registerUser, saveCredentials };
+export { saveCredentials };

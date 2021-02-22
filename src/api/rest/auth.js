@@ -1,5 +1,5 @@
-import axios from '../interceptor';
+import axios from "../interceptor";
 
 export const auth = (url) => {
-	return axios.post('auth.json', { url });
+  return axios.post("", { method: "account.auth", params: { url } });
 };

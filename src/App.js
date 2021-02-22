@@ -34,7 +34,6 @@ import AboutModalCard from "./components/AboutModalCard";
 import HistoryModalPage from "./components/HistoryModalPage";
 import InfoModalCard from "./components/InfoModalCard";
 import { saveCredentials } from "./services";
-import { user } from "./api/rest/user";
 import { getProfile, setNotifications } from "./store/data/actions";
 import QuizModalCard from "./components/QuizModalCard";
 import PayModalCard from "./components/PayModalCard";

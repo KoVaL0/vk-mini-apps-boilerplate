@@ -7,52 +7,54 @@ import {
   PanelHeaderButton,
   Title,
   Button,
-  Group,
   Div,
-  CardGrid,
+  CardGrid, ScreenSpinner,
 } from "@vkontakte/vkui";
 import {withRouter} from "@happysanta/router";
-import {MODAL_INFO, MODAL_QUIZ} from "../router";
+import {MODAL_QUIZ, PAGE_MAIN, PAGE_QUIZ_CARD, POPOUT_SPINNER} from "../router";
 import "./quiz.css";
 import {
   Icon24BrowserBack,
-  Icon24Info,
   Icon56InfoOutline,
   Icon56RecentOutline
 } from "@vkontakte/icons";
-import {state} from "../store/state";
+import logo from "../img/logo.png";
 
 class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = state
-    this.quiz = this.state.quiz[window.location.hash.split("/")[2]]
+    this.state = this.props.data
+    this.quiz = this.state.quiz[window.location.hash.split("/")[2].split("?")[0]]
+    console.log(this.quiz.header)
+    console.log("this.quiz.image")
   }
 
   render() {
-    const {id, router, } = this.props;
+    const {id, router,} = this.props;
+    const popout = (() => {
+      if (router.getPopupId() === POPOUT_SPINNER) {
+        return <ScreenSpinner/>
+      }
+    })
+
     return (
       <Panel id={id}>
         <PanelHeader
           style={{textAlign: "center"}}
           separator={false}
+          popout={popout}
           left={
             <>
-              <PanelHeaderButton onClick={() => router.popPage()}>
+              <PanelHeaderButton onClick={() => router.pushPage(PAGE_MAIN)}>
                 <Icon24BrowserBack/>
-              </PanelHeaderButton>
-              <PanelHeaderButton
-                onClick={() => router.pushModal(MODAL_INFO)}
-              >
-                <Icon24Info/>
               </PanelHeaderButton>
             </>
           }
         >
-          РосОпрос
+          <img alt='logo' src={logo} height={36} style={{margin: "0 auto"}}/>
         </PanelHeader>
-        <Group mode="plain">
+        <div>
           <CardGrid size="l" className={"quiz-image"}
                     style={{backgroundImage: `url(${this.quiz.image})`}}>
           </CardGrid>
@@ -62,27 +64,27 @@ class Home extends React.Component {
             </Title>
           </Div>
           <Div style={{display: "flex", justifyContent: "space-around"}}>
-            <div style={{display: "flex", alignItems: "center"}}>
-              <Icon56InfoOutline/>
+            <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
+              <Icon56InfoOutline width={18} height={18} style={{marginRight: "8px"}}/>
               {this.quiz.questions.length} вопросов
             </div>
-            <div style={{display: "flex", alignItems: "center"}}>
-              <Icon56RecentOutline/>
-              {this.quiz.questions.length*3/6} мин.
+            <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
+              <Icon56RecentOutline width={18} height={18} style={{marginRight: "8px"}}/>
+              {this.quiz.questions.length * 3 / 6} мин.
             </div>
           </Div>
           <Div>
             Buxum bi-color palus est.Ubi est ferox burgus?Albus, mirabilis amors tandem visum de bi-color,
             clemens ratione.Flavum byssus satis dignuss bulla est.
           </Div>
-        </Group>
+        </div>
         <Div align={"center"}>
           <Button
-            stretched
+            stretched={"true"}
             size="l"
             mode={"commerce"}
             onClick={() => {
-              router.pushModal(MODAL_QUIZ)
+              router.pushPage(PAGE_QUIZ_CARD)
             }}>
             Начать опрос
           </Button>
@@ -95,6 +97,7 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
   return {
     activeQuiz: state.data.activeQuiz,
+    data: state.data.data,
   };
 };
 

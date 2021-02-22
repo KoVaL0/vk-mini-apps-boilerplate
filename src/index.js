@@ -11,12 +11,15 @@ import { RouterContext } from "@happysanta/router";
 import { router } from "./router/index.js";
 import { AdaptivityProvider, AppRoot } from "@vkontakte/vkui";
 import {composeWithDevTools} from "redux-devtools-extension";
+import {state} from "./store/state";
+import {setData} from "./store/data/actions";
 
 export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 initApp();
-const isEpicEnabled = false;
+const isEpicEnabled = true;
 isIntroViewed();
+store.dispatch(setData(state))
 ReactDOM.render(
   <RouterContext.Provider value={router}>
     <Provider store={store}>

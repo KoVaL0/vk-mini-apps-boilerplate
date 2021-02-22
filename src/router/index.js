@@ -18,18 +18,22 @@ export const MODAL_ABOUT = "modal_about";
 export const MODAL_HISTORY = "modal_history";
 export const MODAL_INFO = "modal_info";
 export const MODAL_PAY = "modal_pay";
+export const MODAL_SETTINGS = "modal_settings";
 
 export const POPOUT_CONFIRM = "popout_confirm";
 export const POPOUT_SPINNER = "popout_spinner";
 
 export const PAGE_QUIZ = `/quiz/:id([0-9]+)`;
+export const PAGE_QUIZ_CARD = `/quiz_card`;
 export const PANEL_QUIZ = "panel_quiz";
+export const PANEL_QUIZ_CARD = "panel_quiz_card";
 export const MODAL_QUIZ = "modal_quiz";
 
 const routes = {
   [PAGE_MAIN]: new Page(PANEL_MAIN, VIEW_MAIN),
   [PAGE_PROFILE]: new Page(PANEL_PROFILE, VIEW_PROFILE),
   [PAGE_QUIZ]: new Page(PANEL_QUIZ, VIEW_MAIN),
+  [PAGE_QUIZ_CARD]: new Page(PANEL_QUIZ_CARD, VIEW_MAIN),
 };
 
 export const router = new Router(routes);
