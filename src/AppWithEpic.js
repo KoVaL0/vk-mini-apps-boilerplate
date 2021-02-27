@@ -88,9 +88,6 @@ class App extends React.Component {
     }
   }
 
-  updateQuiz = (id) => {
-
-  }
 
   render() {
     const {location, colorScheme, router, snackbar} = this.props;
@@ -146,7 +143,6 @@ class App extends React.Component {
                 />
 
                 {this.props.data.quiz.length>0 &&<Main
-                  updateQuiz={(id) => this.updateQuiz(id)}
                   activePanel={location.getViewActivePanel(VIEW_MAIN)}
                   history={location.getViewHistory(VIEW_MAIN)}
                   id={VIEW_MAIN}
