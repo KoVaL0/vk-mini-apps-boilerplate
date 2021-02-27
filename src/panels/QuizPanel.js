@@ -8,13 +8,16 @@ import {
   Title,
   Button,
   Div,
-  CardGrid, ScreenSpinner,
+  CardGrid,
+  ScreenSpinner,
+  Placeholder,
 } from "@vkontakte/vkui";
 import {withRouter} from "@happysanta/router";
 import {PAGE_MAIN, PAGE_QUIZ_CARD, POPOUT_SPINNER} from "../router";
 import "./quiz.css";
 import {
   Icon24BrowserBack,
+  Icon56ErrorOutline,
   Icon56InfoOutline,
   Icon56RecentOutline
 } from "@vkontakte/icons";
@@ -31,19 +34,31 @@ class QuizPanel extends React.Component {
     this.state = {
       loading: false
     }
+    this.error = false
+    this.emptyArr = false
   }
 
   componentDidMount() {
     this.props.router.replacePopup(POPOUT_SPINNER)
     poll(+(this.id + 1))
       .then(async (res) => {
+        console.log(res)
+        if (!res.data.result.polls[this.id]?.questions) {
+          this.emptyArr = true
+          this.props.router.replacePopup(null)
+          return
+        }
         if (!this.state.loading) {
-          this.props.setData([res.data.result.polls[this.id]])
+          this.props.setData(res.data.result.polls)
           this.props.router.replacePopup(null)
           this.setState({loading: true})
         }
       })
-      .catch((e) => (console.log(e)));
+      .catch((e) => {
+        console.log(e)
+        this.error = true
+        this.props.router.replacePopup(null)
+      });
   }
 
   render() {
@@ -107,7 +122,16 @@ class QuizPanel extends React.Component {
               </Button>
             </Div>
           </div>
-          : null
+          : null}
+        {this.error &&
+          <Placeholder icon={<Icon56ErrorOutline />} header="Ошибка">
+          Что-то пошло не так, попробуйте обновить.
+          </Placeholder>
+        }
+        {this.emptyArr &&
+        <Placeholder icon={<Icon56ErrorOutline />} header="Ошибка">
+          Нет элементов
+        </Placeholder>
         }
       </Panel>
     );
