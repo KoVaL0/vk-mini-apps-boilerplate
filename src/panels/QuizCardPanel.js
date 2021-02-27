@@ -1,6 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import {
   Panel,
   PanelHeader,
@@ -16,11 +16,10 @@ import {
   Snackbar,
   Title,
 } from "@vkontakte/vkui";
-import { setActiveAnswer, setSnackbar } from "../store/data/actions";
-import { withRouter } from "@happysanta/router";
+import {setActiveAnswer, setSnackbar} from "../store/data/actions";
+import {withRouter} from "@happysanta/router";
 import {
   PAGE_MAIN,
-  PANEL_MAIN,
   POPOUT_CONFIRM,
   POPOUT_SPINNER,
 } from "../router";
@@ -31,14 +30,13 @@ import {
   Icon24Document,
 } from "@vkontakte/icons";
 import logo from "../img/logo.png";
-import { state } from "../store/state";
-import axios from "axios";
 import "./home.css";
+import {answer} from "../api";
 
 class QuizCardPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = state;
+    this.state = this.props.data;
     this.quiz = this.state.quiz[this.props.index];
     this.answer = null;
     this.data = {
@@ -59,13 +57,17 @@ class QuizCardPanel extends React.Component {
       <Snackbar
         onClose={() => this.props.setSnackbar(null)}
         duration={2500}
-        before={<Icon16ErrorCircleFill width={24} height={24} />}
+        before={<Icon16ErrorCircleFill width={24} height={24}/>}
         onClick={() => this.props.setSnackbar(null)}
       >
         {text}
       </Snackbar>
     );
   };
+
+  handlerEnd = () => {
+    this.props.router.replacePopup(POPOUT_CONFIRM)
+  }
 
   zeroing = () => {
     this.answer = null;
@@ -79,19 +81,41 @@ class QuizCardPanel extends React.Component {
     this.single = "";
   };
 
+  answerMultiArr = () => {
+    const arr = []
+    for (let key in (this.answerMulti)) {
+      if (this.answerMulti[key]) {
+        switch (key) {
+          case "first" : {
+            arr.push(1)
+            break
+          }
+          case "second" : {
+            arr.push(2)
+            break
+          }
+          case "third" : {
+            arr.push(3)
+            break
+          }
+        }
+    }}
+    return arr
+  }
+
   responseAnswer = (type, i) => {
     switch (type) {
       case "single": {
-        return (this.data.answer[i] = this.single);
+        return this.single
       }
       case "input": {
-        return (this.data.answer[i] = this.input);
+        return this.input
       }
       case "file": {
-        return (this.data.answer[i] = this.file);
+        return this.file
       }
       case "multi": {
-        return (this.data.answer[i] = { ...this.answerMulti });
+        return this.answerMultiArr()
       }
       default: {
         return console.log(
@@ -109,39 +133,28 @@ class QuizCardPanel extends React.Component {
         this.answerMulti.third)
     ) {
       this.responseAnswer("multi", i);
-      this.setState({ slideIndex: this.state.slideIndex + 1 });
+      this.setState({slideIndex: this.state.slideIndex + 1});
     } else if (type !== "multi") {
-      this.setState({ slideIndex: this.state.slideIndex + 1 });
+      this.setState({slideIndex: this.state.slideIndex + 1});
       this.responseAnswer(type, i);
     } else return console.log("Нет ответа!");
   };
 
   handlerClickNext = (i, type) => {
-    if (this.quiz.questions.length - 1 > i && this.answer === true) {
-      this.props.setActiveAnswer(null);
-      this.checkAnswer(i, type);
-      this.zeroing();
-    } else if (this.quiz.questions.length - 1 === i && this.answer === true) {
+    if (this.quiz.questions.length > i && this.answer === true) {
       this.checkAnswer(i, type);
       this.props.setActiveAnswer(null);
-      this.zeroing();
-      console.log(this.data);
-      console.log("this.data");
-      axios
-        .post("", this.data) // Указать url отправки ответа
+      answer(this.props.index, this.quiz.questions[i].id, this.responseAnswer(type, i))
         .then(() => {
-          this.props.router.replacePopup(POPOUT_SPINNER);
+          this.props.router.replacePopup(POPOUT_SPINNER)
         })
         .catch((err) => {
-          console.log(err, "Error!");
+          console.log(err, "Error!")
         })
         .finally(() => {
-          if (!this.props.notifications) {
-            this.props.router.replacePopup(POPOUT_CONFIRM);
-          } else {
-            this.props.router.replacePage(PAGE_MAIN);
-          }
-        });
+          this.props.router.replacePopup(null)
+        })
+      this.zeroing();
     } else {
       switch (type) {
         case "single": {
@@ -181,7 +194,7 @@ class QuizCardPanel extends React.Component {
   handlerChangeSingle = (i, answer) => {
     this.props.setActiveAnswer(i);
     this.answer = true;
-    this.single = answer;
+    this.single = answer.id;
   };
 
   handlerChangeMulti = (checked, id) => {
@@ -214,20 +227,20 @@ class QuizCardPanel extends React.Component {
   };
 
   render() {
-    const { id, profile, router, notifications } = this.props;
+    const {id, profile, router, notifications} = this.props;
 
     return (
       <Panel id={id}>
         <PanelHeader
-          style={{ textAlign: "center", marginBottom: 0 }}
+          style={{textAlign: "center", marginBottom: 0}}
           separator={false}
           left={
             <PanelHeaderButton onClick={() => router.pushPage(PAGE_MAIN)}>
-              <Icon24BrowserBack />
+              <Icon24BrowserBack/>
             </PanelHeaderButton>
           }
         >
-          <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
+          <img alt="logo" src={logo} height={36} style={{margin: "0 auto"}}/>
         </PanelHeader>
         <Div
           style={{
@@ -243,7 +256,7 @@ class QuizCardPanel extends React.Component {
             slideIndex={this.state.slideIndex}
             slideWidth="100%"
             align="right"
-            style={{ width: "100%", height: "100%" }}
+            style={{width: "100%", height: "100%"}}
           >
             {this.quiz.questions.map((item, quest_number) => (
               <div key={quest_number}>
@@ -258,58 +271,59 @@ class QuizCardPanel extends React.Component {
                 >
                   {item.title}
                 </Title>
-                <Group style={{ padding: "20px 0" }}>
-                  {item.answer.map((answer, i) => (
-                    <React.Fragment key={i}>
-                      {item.type === "single" ? (
-                        <Button
-                          size="s"
-                          mode={
-                            this.props.activeAnswer === i
-                              ? "commerce"
-                              : "overlay_primary"
-                          }
-                          stretched={"true"}
-                          style={{
-                            marginBottom: "10px",
-                            minHeight: "36px",
-                            border: "1px #4986cc",
-                            color: "#000000",
-                          }}
-                          onClick={() => this.handlerChangeSingle(i, answer)}
-                        >
-                          <Text>{answer}</Text>
-                        </Button>
-                      ) : item.type === "multi" ? (
-                        <Checkbox
-                          stretched={"true"}
-                          mode={
-                            this.props.activeAnswer === i
-                              ? "commerce"
-                              : "overlay_primary"
-                          }
-                          style={{
-                            marginBottom: "10px",
-                            minHeight: "36px",
-                            border: "1px solid #4986cc",
-                            color: "#000000",
-                            borderRadius: "10px",
-                          }}
-                          onChange={(e) =>
-                            this.handlerChangeMulti(e.target.checked, i)
-                          }
-                        >
-                          <Text>{answer}</Text>
-                        </Checkbox>
-                      ) : item.type === "input" ? (
+                <Group style={{padding: "20px 0"}}>
+                  {item.type === "single" ? (
+                      item.answers.map((answer, i) => (
+                        <React.Fragment key={i}>
+                          <Button
+                            size="s"
+                            mode={
+                              this.props.activeAnswer === i
+                                ? "commerce"
+                                : "overlay_primary"
+                            }
+                            stretched={"true"}
+                            style={{
+                              marginBottom: "10px",
+                              minHeight: "36px",
+                              border: "1px #4986cc",
+                              color: "#000000",
+                            }}
+                            onClick={() => this.handlerChangeSingle(i, answer)}
+                          >
+                            <Text>{answer.answer}</Text>
+                          </Button>
+                        </React.Fragment>
+                      )))
+                    : item.type === "multi" ? (
+                        item.answers.map((answer, i) => (
+                          <React.Fragment key={i}>
+                            <Checkbox
+                              stretched={"true"}
+                              mode={
+                                this.props.activeAnswer === i
+                                  ? "commerce"
+                                  : "overlay_primary"
+                              }
+                              style={{
+                                marginBottom: "10px",
+                                minHeight: "36px",
+                                border: "1px solid #4986cc",
+                                color: "#000000",
+                                borderRadius: "10px",
+                              }}
+                              onChange={(e) =>
+                                this.handlerChangeMulti(e.target.checked, i)
+                              }
+                            >
+                              <Text>{answer.answer}</Text>
+                            </Checkbox>
+                          </React.Fragment>
+                        )))
+                      : item.type === "input" ? (
                         <Input
                           size="s"
                           stretched={"true"}
-                          mode={
-                            this.props.activeAnswer === i
-                              ? "commerce"
-                              : "overlay_primary"
-                          }
                           style={{
                             marginBottom: "10px",
                             minHeight: "36px",
@@ -318,15 +332,15 @@ class QuizCardPanel extends React.Component {
                           onChange={(e) =>
                             this.handlerChangeInput(e.target.value)
                           }
-                          placeholder={answer}
+                          placeholder={item.title}
                         />
                       ) : item.type === "file" ? (
                         <File
-                          before={<Icon24Document />}
+                          before={<Icon24Document/>}
                           stretched={"true"}
                           size="s"
                           mode={
-                            this.props.activeAnswer === i
+                            this.props.activeAnswer === 0
                               ? "commerce"
                               : "overlay_primary"
                           }
@@ -339,7 +353,7 @@ class QuizCardPanel extends React.Component {
                             this.handlerChangeFile(e.target.files[0])
                           }
                         >
-                          <Text>{answer}</Text>
+                          <Text>Загрузите файл</Text>
                         </File>
                       ) : item.type === "end" ? (
                         <Title
@@ -357,21 +371,30 @@ class QuizCardPanel extends React.Component {
                           {item.answer}
                         </Title>
                       ) : null}
-                    </React.Fragment>
-                  ))}
                 </Group>
                 <Button
                   size="s"
                   stretched={"true"}
                   onClick={() => this.handlerClickNext(quest_number, item.type)}
-                  style={{ minHeight: "36px" }}
+                  style={{minHeight: "36px"}}
                 >
-                  {this.quiz.questions.length - 1 > quest_number
-                    ? "Продолжить"
-                    : "Завершить"}
+                  Продолжить
                 </Button>
               </div>
             ))}
+            <Div>
+              <Title align={"center"} style={{color: "#ffffff"}}>
+                Ваша награда {this.quiz.award} баллов
+              </Title>
+              <Button
+                size="s"
+                stretched={"true"}
+                onClick={() => this.handlerEnd()}
+                style={{minHeight: "36px"}}
+              >
+                Завершить
+              </Button>
+            </Div>
           </Gallery>
         </Div>
       </Panel>

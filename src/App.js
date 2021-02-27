@@ -35,7 +35,6 @@ import HistoryModalPage from "./components/HistoryModalPage";
 import InfoModalCard from "./components/InfoModalCard";
 import { saveCredentials } from "./services";
 import { getProfile, setNotifications } from "./store/data/actions";
-import QuizModalCard from "./components/QuizModalCard";
 import PayModalCard from "./components/PayModalCard";
 
 class App extends React.Component {
@@ -77,7 +76,6 @@ class App extends React.Component {
         <AboutModalCard onClose={() => router.popPage()} id={MODAL_ABOUT} />
         <PayModalCard onClose={() => router.popPage()} id={MODAL_PAY} />
         <InfoModalCard onClose={() => router.popPage()} id={MODAL_INFO} />
-        <QuizModalCard onClose={() => router.popPage()} id={MODAL_QUIZ} />
         <HistoryModalPage onClose={() => router.popPage()} id={MODAL_HISTORY} />
       </ModalRoot>
     );

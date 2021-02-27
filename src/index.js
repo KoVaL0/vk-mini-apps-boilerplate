@@ -19,7 +19,6 @@ export const store = createStore(rootReducer, composeWithDevTools(applyMiddlewar
 initApp();
 const isEpicEnabled = true;
 isIntroViewed();
-store.dispatch(setData(state))
 ReactDOM.render(
   <RouterContext.Provider value={router}>
     <Provider store={store}>

@@ -11,7 +11,7 @@ import {
   CardGrid, ScreenSpinner,
 } from "@vkontakte/vkui";
 import {withRouter} from "@happysanta/router";
-import {MODAL_QUIZ, PAGE_MAIN, PAGE_QUIZ_CARD, POPOUT_SPINNER} from "../router";
+import {PAGE_MAIN, PAGE_QUIZ_CARD, POPOUT_SPINNER} from "../router";
 import "./quiz.css";
 import {
   Icon24BrowserBack,
@@ -19,15 +19,31 @@ import {
   Icon56RecentOutline
 } from "@vkontakte/icons";
 import logo from "../img/logo.png";
+import {poll} from "../api";
+import {setData} from "../store/data/actions";
 
-class Home extends React.Component {
+class QuizPanel extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = this.props.data
-    this.quiz = this.state.quiz[window.location.hash.split("/")[2].split("?")[0]]
-    console.log(this.quiz.header)
-    console.log("this.quiz.image")
+    this.id = window.location.hash.split("/")[2].split("?")[0]
+    this.quiz = this.props.data.quiz[this.id]
+    this.state = {
+      loading: false
+    }
+  }
+
+  componentDidMount() {
+    this.props.router.replacePopup(POPOUT_SPINNER)
+    poll(+(this.id + 1))
+      .then(async (res) => {
+        if (!this.state.loading) {
+          this.props.setData([res.data.result.polls[this.id]])
+          this.props.router.replacePopup(null)
+          this.setState({loading: true})
+        }
+      })
+      .catch((e) => (console.log(e)));
   }
 
   render() {
@@ -54,41 +70,45 @@ class Home extends React.Component {
         >
           <img alt='logo' src={logo} height={36} style={{margin: "0 auto"}}/>
         </PanelHeader>
-        <div>
-          <CardGrid size="l" className={"quiz-image"}
-                    style={{backgroundImage: `url(${this.quiz.image})`}}>
-          </CardGrid>
-          <Div>
-            <Title level="2" weight={"bold"}>
-              {this.quiz.header}
-            </Title>
-          </Div>
-          <Div style={{display: "flex", justifyContent: "space-around"}}>
-            <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
-              <Icon56InfoOutline width={18} height={18} style={{marginRight: "8px"}}/>
-              {this.quiz.questions.length} вопросов
+        {this.state.loading ?
+          <div>
+            <div>
+              <CardGrid size="l" className={"quiz-image"}
+                        style={{backgroundImage: `url(${this.quiz.cover})`}}>
+              </CardGrid>
+              <Div>
+                <Title level="2" weight={"bold"}>
+                  {this.quiz.title}
+                </Title>
+              </Div>
+              <Div style={{display: "flex", justifyContent: "space-around"}}>
+                <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
+                  <Icon56InfoOutline width={18} height={18} style={{marginRight: "8px"}}/>
+                  {this.quiz?.questions?.length} вопросов
+                </div>
+                <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
+                  <Icon56RecentOutline width={18} height={18} style={{marginRight: "8px"}}/>
+                  {this.quiz.time / 60} мин.
+                </div>
+              </Div>
+              <Div>
+                {this.quiz.description}
+              </Div>
             </div>
-            <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
-              <Icon56RecentOutline width={18} height={18} style={{marginRight: "8px"}}/>
-              {this.quiz.questions.length * 3 / 6} мин.
-            </div>
-          </Div>
-          <Div>
-            Buxum bi-color palus est.Ubi est ferox burgus?Albus, mirabilis amors tandem visum de bi-color,
-            clemens ratione.Flavum byssus satis dignuss bulla est.
-          </Div>
-        </div>
-        <Div align={"center"}>
-          <Button
-            stretched={"true"}
-            size="l"
-            mode={"commerce"}
-            onClick={() => {
-              router.pushPage(PAGE_QUIZ_CARD)
-            }}>
-            Начать опрос
-          </Button>
-        </Div>
+            <Div align={"center"}>
+              <Button
+                stretched={"true"}
+                size="l"
+                mode={"commerce"}
+                onClick={() => {
+                  router.pushPage(PAGE_QUIZ_CARD)
+                }}>
+                Начать опрос
+              </Button>
+            </Div>
+          </div>
+          : null
+        }
       </Panel>
     );
   }
@@ -104,8 +124,10 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    ...bindActionCreators({}, dispatch),
+    ...bindActionCreators({
+      setData
+    }, dispatch),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Home));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(QuizPanel));

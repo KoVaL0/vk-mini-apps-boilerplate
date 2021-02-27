@@ -44,11 +44,14 @@ class Home extends React.Component {
     );
   };
 
-  render() {
-    const { id, router, notifications } = this.props;
-    if (!notifications) {
+  componentDidMount() {
+    if (!this.props.notifications) {
       this.props.setBlockView(true);
     } else setTimeout(() => this.props.setBlockView(false), 1000);
+  }
+
+  render() {
+    const { id, router, notifications } = this.props;
 
     return (
       <Panel id={id}>
@@ -109,23 +112,23 @@ class Home extends React.Component {
         <Group
           mode="plain"
           header={
-            <Title mode="secondary" style={{ margin: "0 16px", color: "grey" }}>
+            <Title mode="secondary" style={{margin: "0 16px", color: "grey"}}>
               Доступные опросы
             </Title>
           }
         >
           <CardGrid size="l">
             {this.state.quiz.map((quiz, id) => (
-              <div key={id} style={{ width: "100%", margin: "8px 0" }}>
+              <div key={id} style={{width: "100%", margin: "8px 0"}}>
                 {quiz.type === "reusable" ? (
                   <ContentCard
-                    image={quiz.image}
+                    image={quiz.cover}
                     height={`${window.innerWidth / 4}`}
-                    header={quiz.header}
-                    text={quiz.text}
+                    header={quiz.title}
+                    text={"Ваше мнение очень важно"}
                     onClick={() => {
-                      this.props.setActiveQuiz(quiz.id);
-                      router.pushPage(PAGE_QUIZ, { id: quiz.id });
+                      this.props.setActiveQuiz(id);
+                      router.pushPage(PAGE_QUIZ, {id: id});
                     }}
                   />
                 ) : (
@@ -137,7 +140,7 @@ class Home extends React.Component {
                     <Title
                       level={"3"}
                       weight="bold"
-                      style={{ padding: "10px 20px" }}
+                      style={{padding: "10px 20px"}}
                     >
                       {quiz.text}
                     </Title>

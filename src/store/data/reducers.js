@@ -29,23 +29,8 @@ const initialState = {
   activeQuiz: null,
   data: {
     slideIndex: null,
-    quiz: [
-      {
-        id: null,
-        type: null,
-        image: null,
-        header: null,
-        text: null,
-        questions: [
-          {
-            type: null,
-            title: null,
-            answer: [null]
-          }
-        ]
-      },
-    ]
-  }
+    quiz: []
+  },
 };
 
 export const dataReducer = (state = initialState, action) => {
@@ -119,7 +104,7 @@ export const dataReducer = (state = initialState, action) => {
     case SET_DATA: {
       return {
         ...state,
-        data: action.payload.data,
+        data: {...state.data, quiz: action.payload.data}
       };
     }
     case SET_BLOCK_VIEW: {
@@ -128,7 +113,6 @@ export const dataReducer = (state = initialState, action) => {
         blockView: action.payload.data,
       };
     }
-
     default: {
       return state;
     }

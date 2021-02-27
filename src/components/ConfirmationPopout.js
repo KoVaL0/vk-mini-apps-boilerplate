@@ -5,13 +5,14 @@ import {connect} from 'react-redux';
 import {Icon20UsersOutline} from "@vkontakte/icons";
 import {bindActionCreators} from "redux";
 import {setNotifications} from "../store/data/actions";
+import {PAGE_MAIN} from "../router";
 
 function Confirm(props) {
 
   const router = useRouter();
   const handlerClick = () => {
     router.replacePopup(null)
-    router.popPage()
+    router.replacePage(PAGE_MAIN)
   }
 
   return (

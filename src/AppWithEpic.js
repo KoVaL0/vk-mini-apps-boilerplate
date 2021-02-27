@@ -1,6 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 import {
   ConfigProvider,
   ScreenSpinner,
@@ -31,9 +31,9 @@ import {
   MODAL_SETTINGS,
 } from "./router";
 import "./App.css";
-import { auth } from "./api";
-import { withRouter } from "@happysanta/router";
-import { getUserInfo, isIntroViewed } from "./api/vk/index";
+import {auth, poll} from "./api";
+import {withRouter} from "@happysanta/router";
+import {getUserInfo, isIntroViewed} from "./api/vk/index";
 import Confirm from "./components/ConfirmationPopout";
 import AboutModalCard from "./components/AboutModalCard";
 import HistoryModalPage from "./components/HistoryModalPage";
@@ -41,7 +41,7 @@ import {
   Icon28NewsfeedOutline,
   Icon28UserCircleOutline,
 } from "@vkontakte/icons";
-import { Epic } from "@vkontakte/vkui/dist/components/Epic/Epic";
+import {Epic} from "@vkontakte/vkui/dist/components/Epic/Epic";
 import Profile from "./views/ProfileView";
 import IntroView from "./views/IntroView";
 import {
@@ -52,32 +52,34 @@ import {
 } from "./store/data/actions";
 import PayModalCard from "./components/PayModalCard";
 import InfoModalCard from "./components/InfoModalCard";
-import QuizModalCard from "./components/QuizModalCard";
-import { state } from "./store/state";
 import SettingsModalCard from "./components/SettingsModalCard";
-import { polls } from "./api/rest/polls";
+import {polls} from "./api/rest/polls";
 
 class App extends React.Component {
   popout() {
-    const { location } = this.props;
+    const {location} = this.props;
     if (location.getPopupId() === POPOUT_CONFIRM) {
-      return <Confirm />;
+      return <Confirm/>;
     } else if (location.getPopupId() === POPOUT_SPINNER) {
-      return <ScreenSpinner />;
+      return <ScreenSpinner/>;
     }
   }
 
   async componentDidMount() {
     getUserInfo().then((res) => {
-      console.log(res);
       this.props.getProfile(res);
     });
-    auth(window.location.search).then((res) => {
-      localStorage.setItem("user_ro", res.data.result.token);
-      polls().then((res) => {
-        console.log(res);
-      });
-    });
+    console.log(window.location.search)
+    auth(window.location.search)
+      .then((res) => {
+        localStorage.setItem("user_ro", res.data.result.token);
+        polls()
+          .then((res) => {
+            this.props.setData(res.data.result.polls)
+          })
+          .catch((e) => (console.log(e)));
+      })
+      .catch((e) => (console.log(e, "Auth")));
 
     if ((await isIntroViewed()) === "viewed") {
       router.replacePage(PAGE_MAIN);
@@ -86,26 +88,29 @@ class App extends React.Component {
     }
   }
 
+  updateQuiz = (id) => {
+
+  }
+
   render() {
-    const { location, colorScheme, router, snackbar } = this.props;
+    const {location, colorScheme, router, snackbar} = this.props;
     const popout = this.popout();
     const modal = (
       <ModalRoot
         onClose={() => router.popPage()}
         activeModal={location.getModalId()}
       >
-        <AboutModalCard id={MODAL_ABOUT} />
-        <SettingsModalCard id={MODAL_SETTINGS} />
-        <PayModalCard id={MODAL_PAY} />
-        <InfoModalCard id={MODAL_INFO} />
-        <QuizModalCard id={MODAL_QUIZ} />
-        <HistoryModalPage onClose={() => router.popPage()} id={MODAL_HISTORY} />
+        <AboutModalCard id={MODAL_ABOUT}/>
+        <SettingsModalCard id={MODAL_SETTINGS}/>
+        <PayModalCard id={MODAL_PAY}/>
+        <InfoModalCard id={MODAL_INFO}/>
+        <HistoryModalPage onClose={() => router.popPage()} id={MODAL_HISTORY}/>
       </ModalRoot>
     );
     return (
       <ConfigProvider isWebView={true} scheme={colorScheme}>
         <Root activeView={this.props.isOnboardingViewed ? "main" : "intro"}>
-          <IntroView id="intro" activePanel="intro-1" />
+          <IntroView id="intro" activePanel="intro-1"/>
           <View id="main" activePanel="main-1">
             <Panel id="main-1">
               <Epic
@@ -118,7 +123,7 @@ class App extends React.Component {
                       data-story={VIEW_MAIN}
                       text="Опросы"
                     >
-                      <Icon28NewsfeedOutline />
+                      <Icon28NewsfeedOutline/>
                     </TabbarItem>
 
                     <TabbarItem
@@ -127,7 +132,7 @@ class App extends React.Component {
                       data-story={VIEW_PROFILE}
                       text="Профиль"
                     >
-                      <Icon28UserCircleOutline />
+                      <Icon28UserCircleOutline/>
                     </TabbarItem>
                   </Tabbar>
                 }
@@ -140,13 +145,14 @@ class App extends React.Component {
                   popout={popout}
                 />
 
-                <Main
+                {this.props.data.quiz.length>0 &&<Main
+                  updateQuiz={(id) => this.updateQuiz(id)}
                   activePanel={location.getViewActivePanel(VIEW_MAIN)}
                   history={location.getViewHistory(VIEW_MAIN)}
                   id={VIEW_MAIN}
                   modal={modal}
                   popout={popout}
-                />
+                />}
               </Epic>
               {snackbar}
             </Panel>
@@ -156,11 +162,13 @@ class App extends React.Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     snackbar: state.data.snackbar,
     colorScheme: state.data.colorScheme,
     isOnboardingViewed: state.data.isOnboardingViewed,
+    data: state.data.data,
   };
 };
 
@@ -168,7 +176,7 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
     ...bindActionCreators(
-      { setIsOnboardingViewed, getProfile, setNotifications, setData },
+      {setIsOnboardingViewed, getProfile, setNotifications, setData},
       dispatch,
     ),
   };

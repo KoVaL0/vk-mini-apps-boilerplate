@@ -7,7 +7,12 @@ import {
   SET_ACTIVE_QUIZ,
   SET_NOTIFICATIONS,
   SET_PROFILE,
-  SET_ACTIVE_ANSWER, SET_DATA, SET_BLOCK_VIEW, SET_CITY, SET_COUNTRY, SET_SEX
+  SET_ACTIVE_ANSWER,
+  SET_DATA,
+  SET_BLOCK_VIEW,
+  SET_CITY,
+  SET_COUNTRY,
+  SET_SEX,
 } from "./actionTypes";
 
 export const setColorScheme = (inputData) => ({
@@ -16,6 +21,7 @@ export const setColorScheme = (inputData) => ({
     data: inputData,
   },
 });
+
 export const setSnackbar = (inputData) => (
   {
   type: SET_SNACKBAR,
@@ -23,6 +29,7 @@ export const setSnackbar = (inputData) => (
     data: inputData,
   },
 });
+
 export const setIsOnboardingViewed = (inputData) => ({
   type: SET_IS_ONBOARDING_VIEWED,
   payload: {
