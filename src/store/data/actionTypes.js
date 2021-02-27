@@ -14,3 +14,4 @@ export const SET_BLOCK_VIEW = 'SET_BLOCK_VIEW';
 export const SET_CITY = 'SET_CITY';
 export const SET_COUNTRY = 'SET_COUNTRY';
 export const SET_SEX = 'SET_SEX';
+export const SET_QUIZ = 'SET_QUIZ';

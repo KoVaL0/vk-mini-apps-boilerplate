@@ -23,14 +23,14 @@ import {
 } from "@vkontakte/icons";
 import logo from "../img/logo.png";
 import {poll} from "../api";
-import {setData} from "../store/data/actions";
+import {setQuiz} from "../store/data/actions";
 
 class QuizPanel extends React.Component {
 
   constructor(props) {
     super(props);
     this.id = window.location.hash.split("/")[2].split("?")[0]
-    this.quiz = this.props.data.quiz[this.id]
+    this.quiz = this.props.data[0]
     this.state = {
       loading: false
     }
@@ -40,16 +40,16 @@ class QuizPanel extends React.Component {
 
   componentDidMount() {
     this.props.router.replacePopup(POPOUT_SPINNER)
-    poll(+(this.id + 1))
+    poll(+this.id)
       .then(async (res) => {
         console.log(res)
-        if (!res.data.result.polls[this.id]?.questions) {
+        if (!res.data.result.polls[0]?.questions) {
           this.emptyArr = true
           this.props.router.replacePopup(null)
           return
         }
         if (!this.state.loading) {
-          this.props.setData(res.data.result.polls)
+          this.props.setQuiz(res.data.result.polls)
           this.props.router.replacePopup(null)
           this.setState({loading: true})
         }
@@ -89,11 +89,11 @@ class QuizPanel extends React.Component {
           <div>
             <div>
               <CardGrid size="l" className={"quiz-image"}
-                        style={{backgroundImage: `url(${this.quiz.cover})`}}>
+                        style={{backgroundImage: `url(${this.quiz?.cover})`}}>
               </CardGrid>
               <Div>
                 <Title level="2" weight={"bold"}>
-                  {this.quiz.title}
+                  {this.quiz?.title}
                 </Title>
               </Div>
               <Div style={{display: "flex", justifyContent: "space-around"}}>
@@ -103,11 +103,11 @@ class QuizPanel extends React.Component {
                 </div>
                 <div style={{display: "flex", alignItems: "center", fontSize: "14px"}}>
                   <Icon56RecentOutline width={18} height={18} style={{marginRight: "8px"}}/>
-                  {this.quiz.time / 60} мин.
+                  {this.quiz?.time / 60} мин.
                 </div>
               </Div>
               <Div>
-                {this.quiz.description}
+                {this.quiz?.description}
               </Div>
             </div>
             <Div align={"center"}>
@@ -141,7 +141,7 @@ class QuizPanel extends React.Component {
 const mapStateToProps = (state) => {
   return {
     activeQuiz: state.data.activeQuiz,
-    data: state.data.data,
+    data: state.data.quiz,
   };
 };
 
@@ -149,7 +149,7 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
     ...bindActionCreators({
-      setData
+      setQuiz
     }, dispatch),
   };
 }

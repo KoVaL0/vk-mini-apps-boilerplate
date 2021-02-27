@@ -37,7 +37,7 @@ class QuizCardPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.props.data;
-    this.quiz = this.state.quiz[this.props.index];
+    this.quiz = this.props.quiz[0];
     this.answer = null;
     this.data = {
       answer: {},
@@ -406,6 +406,7 @@ const mapStateToProps = (state) => {
   return {
     index: state.data.activeQuiz,
     data: state.data.data,
+    quiz: state.data.quiz,
     activeAnswer: state.data.activeAnswer,
     snackbar: state.data.snackbar,
     notifications: state.data.notifications,

@@ -12,7 +12,7 @@ import {
   SET_BLOCK_VIEW,
   SET_CITY,
   SET_COUNTRY,
-  SET_SEX,
+  SET_SEX, SET_QUIZ,
 } from "./actionTypes";
 
 export const setColorScheme = (inputData) => ({
@@ -96,6 +96,13 @@ export const setCountry = (inputData) => ({
 
 export const setSex = (inputData) => ({
   type: SET_SEX,
+  payload: {
+    data: inputData,
+  },
+});
+
+export const setQuiz = (inputData) => ({
+  type: SET_QUIZ,
   payload: {
     data: inputData,
   },

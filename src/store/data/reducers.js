@@ -11,7 +11,7 @@ import {
   SET_BLOCK_VIEW,
   SET_CITY,
   SET_SEX,
-  SET_COUNTRY,
+  SET_COUNTRY, SET_QUIZ,
 } from "./actionTypes";
 
 const initialState = {
@@ -31,6 +31,7 @@ const initialState = {
     slideIndex: null,
     quiz: []
   },
+  quiz: []
 };
 
 export const dataReducer = (state = initialState, action) => {
@@ -105,6 +106,12 @@ export const dataReducer = (state = initialState, action) => {
       return {
         ...state,
         data: {...state.data, quiz: action.payload.data}
+      };
+    }
+    case SET_QUIZ: {
+      return {
+        ...state,
+        quiz: action.payload.data
       };
     }
     case SET_BLOCK_VIEW: {
