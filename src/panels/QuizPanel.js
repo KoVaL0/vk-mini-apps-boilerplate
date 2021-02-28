@@ -29,7 +29,6 @@ class QuizPanel extends React.Component {
   constructor(props) {
     super(props);
     this.id = window.location.hash.split("/")[2].split("?")[0];
-    this.quiz = this.props.data[0];
     this.state = {
       loading: false,
     };
@@ -41,17 +40,14 @@ class QuizPanel extends React.Component {
     this.props.router.replacePopup(POPOUT_SPINNER);
     poll(+this.id)
       .then(async (res) => {
-        console.log(res);
-        if (!res.data.result.polls[0]?.questions) {
+        if (!res.data.result.polls.length) {
           this.emptyArr = true;
           this.props.router.replacePopup(null);
           return;
         }
-        if (!this.state.loading) {
-          this.props.setQuiz(res.data.result.polls);
-          this.props.router.replacePopup(null);
-          this.setState({ loading: true });
-        }
+        this.props.setQuiz(res.data.result.polls);
+        this.props.router.replacePopup(null);
+        this.setState({loading: true});
       })
       .catch((e) => {
         console.log(e);
@@ -90,11 +86,11 @@ class QuizPanel extends React.Component {
               <CardGrid
                 size="l"
                 className={"quiz-image"}
-                style={{ backgroundImage: `url(${this.quiz?.cover})` }}
-              ></CardGrid>
+                style={{ backgroundImage: `url(${this.props.quiz.cover})` }}
+              />
               <Div>
                 <Title level="2" weight={"bold"}>
-                  {this.quiz?.title}
+                  {this.props.quiz.title}
                 </Title>
               </Div>
               <Div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -110,7 +106,7 @@ class QuizPanel extends React.Component {
                     height={18}
                     style={{ marginRight: "8px" }}
                   />
-                  {this.quiz?.questions?.length} вопросов
+                  {this.props.quiz.questions.length} вопросов
                 </div>
                 <div
                   style={{
@@ -124,7 +120,7 @@ class QuizPanel extends React.Component {
                     height={18}
                     style={{ marginRight: "8px" }}
                   />
-                  {this.quiz?.time / 60} мин.
+                  {this.props.quiz.time / 60} мин.
                 </div>
               </Div>
               <Div>{this.quiz?.description}</Div>
@@ -161,7 +157,7 @@ class QuizPanel extends React.Component {
 const mapStateToProps = (state) => {
   return {
     activeQuiz: state.data.activeQuiz,
-    data: state.data.quiz,
+    quiz: state.data.quiz[0],
   };
 };
 
