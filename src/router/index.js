@@ -31,6 +31,7 @@ export const MODAL_QUIZ = "modal_quiz";
 
 const routes = {
   [PAGE_MAIN]: new Page(PANEL_MAIN, VIEW_MAIN),
+  [PAGE_INTRO]: new Page(PANEL_INTRO, VIEW_INTRO),
   [PAGE_PROFILE]: new Page(PANEL_PROFILE, VIEW_PROFILE),
   [PAGE_QUIZ]: new Page(PANEL_QUIZ, VIEW_MAIN),
   [PAGE_QUIZ_CARD]: new Page(PANEL_QUIZ_CARD, VIEW_MAIN),
