@@ -127,8 +127,8 @@ class Home extends React.Component {
                     header={quiz.title}
                     text={"Ваше мнение очень важно"}
                     onClick={() => {
-                      this.props.setActiveQuiz(id);
-                      router.pushPage(PAGE_QUIZ, {id: id});
+                      this.props.setActiveQuiz(quiz.id);
+                      router.pushPage(PAGE_QUIZ, {id: quiz.id});
                     }}
                   />
                 ) : (
