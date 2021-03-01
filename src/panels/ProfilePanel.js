@@ -148,7 +148,7 @@ class Home extends React.Component {
                 style={{ color: "#fff", margin: "8px 0" }}
               >
                 {!this.props.notifications
-                  ? "Уведомления выключены"
+                  ? "Включите уведомления, чтобы проходить опросы одними из первых, и зарабатывать больше баллов!"
                   : "Уведомления включены"}
               </Text>
               <Button

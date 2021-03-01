@@ -66,7 +66,11 @@ class QuizCardPanel extends React.Component {
   };
 
   handlerEnd = () => {
-    this.props.router.replacePopup(POPOUT_CONFIRM)
+    if (!this.props.notifications) {
+      this.props.router.replacePopup(POPOUT_CONFIRM)
+    } else {
+      this.props.router.replacePage(PAGE_MAIN)
+    }
   }
 
   zeroing = () => {
@@ -99,7 +103,8 @@ class QuizCardPanel extends React.Component {
             break
           }
         }
-    }}
+      }
+    }
     return arr
   }
 
@@ -382,10 +387,26 @@ class QuizCardPanel extends React.Component {
                 </Button>
               </div>
             ))}
-            <Div>
-              <Title align={"center"} style={{color: "#ffffff"}}>
+            <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+              <img
+                alt={"coin"}
+                src={"https://www.flaticon.com/svg/vstatic/svg/550/550638.svg?token=exp=1614623749~hmac=1d8da7211a86dc17b4701796244affd4"}
+                style={{width: "100px", margin: "20px"}}
+              />
+              <Title level={"1"} align={"center"} style={{color: "#ffffff"}}>
+                {this.quiz.outro}
+              </Title>
+              <Title level={"3"} align={"center"} style={{color: "#ffffff", margin: "20px"}}>
                 Ваша награда {this.quiz.award} баллов
               </Title>
+              <Button
+                size="s"
+                stretched={"true"}
+                onClick={() => this.handlerEnd()}
+                style={{minHeight: "36px", marginBottom: "5px"}}
+              >
+                Забрать награду
+              </Button>
               <Button
                 size="s"
                 stretched={"true"}
@@ -394,7 +415,7 @@ class QuizCardPanel extends React.Component {
               >
                 Завершить
               </Button>
-            </Div>
+            </div>
           </Gallery>
         </Div>
       </Panel>

@@ -89,7 +89,7 @@ class Home extends React.Component {
                   style={{ color: "#fff", margin: "8px 0" }}
                 >
                   {!this.props.notifications
-                    ? "Уведомления выключены"
+                    ? "Включите уведомления, чтобы проходить опросы одними из первых, и зарабатывать больше баллов!"
                     : "Уведомления включены"}
                 </Text>
                 <Button
@@ -123,7 +123,7 @@ class Home extends React.Component {
                 {quiz.type === "reusable" ? (
                   <ContentCard
                     image={quiz.cover}
-                    height={`${window.innerWidth / 4}`}
+                    height={`${window.innerWidth / 2}`}
                     header={quiz.title}
                     text={"Ваше мнение очень важно"}
                     onClick={() => {
