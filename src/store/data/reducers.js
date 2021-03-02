@@ -11,7 +11,7 @@ import {
   SET_BLOCK_VIEW,
   SET_CITY,
   SET_SEX,
-  SET_COUNTRY, SET_QUIZ,
+  SET_COUNTRY, SET_QUIZ, REMOVE_QUIZ, LOADING_QUIZ,
 } from "./actionTypes";
 
 const initialState = {
@@ -19,6 +19,7 @@ const initialState = {
   isOnboardingViewed: true,
   isNotificationsEnabled: false,
   snackbar: null,
+  loading: false,
   profile: {
     city: null,
     country: null,
@@ -118,6 +119,18 @@ export const dataReducer = (state = initialState, action) => {
       return {
         ...state,
         blockView: action.payload.data,
+      };
+    }
+    case LOADING_QUIZ: {
+      return {
+        ...state,
+        loading: action.payload.data,
+      };
+    }
+    case REMOVE_QUIZ: {
+      return {
+        ...state,
+        data: {...state.data, quiz: state.data.quiz.filter(quiz => quiz.id !== action.payload.data)}
       };
     }
     default: {

@@ -16,7 +16,7 @@ import {
   Snackbar,
   Title,
 } from "@vkontakte/vkui";
-import {setActiveAnswer, setSnackbar} from "../store/data/actions";
+import {setActiveAnswer, setSnackbar, removeQuiz} from "../store/data/actions";
 import {withRouter} from "@happysanta/router";
 import {
   PAGE_MAIN,
@@ -37,7 +37,6 @@ class QuizCardPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.props.data;
-    this.quiz = this.props.quiz[0];
     this.answer = null;
     this.data = {
       answer: {},
@@ -65,11 +64,13 @@ class QuizCardPanel extends React.Component {
     );
   };
 
-  handlerEnd = () => {
+  handlerEnd = async () => {
     if (!this.props.notifications) {
-      this.props.router.replacePopup(POPOUT_CONFIRM)
+      await this.props.router.replacePopup(POPOUT_CONFIRM)
+      this.props.removeQuiz(this.props.quiz.id)
     } else {
-      this.props.router.replacePage(PAGE_MAIN)
+      await this.props.router.replacePage(PAGE_MAIN)
+      this.props.removeQuiz(this.props.quiz.id)
     }
   }
 
@@ -146,10 +147,10 @@ class QuizCardPanel extends React.Component {
   };
 
   handlerClickNext = (i, type) => {
-    if (this.quiz.questions.length > i && this.answer === true) {
+    if (this.props.quiz.questions.length > i && this.answer === true) {
       this.checkAnswer(i, type);
       this.props.setActiveAnswer(null);
-      answer(this.props.index, this.quiz.questions[i].id, this.responseAnswer(type, i))
+      answer(this.props.index, this.props.quiz.questions[i].id, this.responseAnswer(type, i))
         .then(() => {
           this.props.router.replacePopup(POPOUT_SPINNER)
         })
@@ -263,7 +264,7 @@ class QuizCardPanel extends React.Component {
             align="right"
             style={{width: "100%", height: "100%"}}
           >
-            {this.quiz.questions.map((item, quest_number) => (
+            {this.props.quiz.questions.map((item, quest_number) => (
               <div key={quest_number}>
                 <Title
                   level={"2"}
@@ -394,10 +395,10 @@ class QuizCardPanel extends React.Component {
                 style={{width: "100px", margin: "20px"}}
               />
               <Title level={"1"} align={"center"} style={{color: "#ffffff"}}>
-                {this.quiz.outro}
+                {this.props.quiz.outro}
               </Title>
               <Title level={"3"} align={"center"} style={{color: "#ffffff", margin: "20px"}}>
-                Ваша награда {this.quiz.award} баллов
+                Ваша награда {this.props.quiz.award} баллов
               </Title>
               <Button
                 size="s"
@@ -427,7 +428,7 @@ const mapStateToProps = (state) => {
   return {
     index: state.data.activeQuiz,
     data: state.data.data,
-    quiz: state.data.quiz,
+    quiz: state.data.quiz[0],
     activeAnswer: state.data.activeAnswer,
     snackbar: state.data.snackbar,
     notifications: state.data.notifications,
@@ -441,6 +442,7 @@ function mapDispatchToProps(dispatch) {
       {
         setActiveAnswer,
         setSnackbar,
+        removeQuiz,
       },
       dispatch,
     ),

@@ -123,7 +123,7 @@ class QuizPanel extends React.Component {
                   {this.props.quiz.time / 60} мин.
                 </div>
               </Div>
-              <Div>{this.quiz?.description}</Div>
+              <Div>{this.props.quiz.description}</Div>
             </div>
             <Div align={"center"}>
               <Button

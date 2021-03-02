@@ -4,6 +4,7 @@ import {useRouter, withRouter} from '@happysanta/router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import {setCountry, setCity, setSex} from "../store/data/actions";
+import {account} from "../api";
 
 class SettingsModalCard extends Component {
   constructor(props) {
@@ -16,14 +17,22 @@ class SettingsModalCard extends Component {
   handlerClick = () => {
     try {
       const data = {
-        city: this.city,
-        country: this.country,
-        sex: this.sex,
+        name: this.props.profile.first_name,
+        surname: this.props.profile.last_name,
+        bdate: this.props.profile.bdate,
+        photo: this.props.profile.photo_200,
+        tamezone: this.props.profile.timezone,
+        city: this.props.profile.city,
+        country: this.props.profile.country,
+        sex: this.props.profile.sex,
       }
       this.props.setCity(this.city)
       this.props.setCountry(this.country)
       this.props.setSex(this.sex)
       console.log(data)
+      account(data).catch((e) => {
+        console.log(e)
+      })
       this.props.router.popPage()
     } catch (e) {
       console.log(e)
@@ -62,7 +71,7 @@ class SettingsModalCard extends Component {
               ]}
             />
           </FormItem>
-          <FormItem top="Пол" style={{marginBottom: "3%"}}>
+          <FormItem top="Пол" style={{marginBottom: "5px"}}>
             <Select
               onChange={(e) => {this.sex = +e.target.value}}
               placeholder="Выберите пол"

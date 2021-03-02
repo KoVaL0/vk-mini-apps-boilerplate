@@ -44,8 +44,8 @@ class Home extends React.Component {
         >
           <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
         </PanelHeader>
-        <Group style={{ margin: "0 16px" }}>
-          <div className="d-row">
+        <Group>
+          <div className="d-row" style={{ margin: "0 16px" }}>
             <img
               alt="profile_img"
               className="profile__photo"
