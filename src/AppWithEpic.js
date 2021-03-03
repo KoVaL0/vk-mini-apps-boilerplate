@@ -31,7 +31,7 @@ import {
   MODAL_SETTINGS,
 } from "./router";
 import "./App.css";
-import {auth, poll} from "./api";
+import {account, auth, poll} from "./api";
 import {withRouter} from "@happysanta/router";
 import {getUserInfo, isIntroViewed} from "./api/vk/index";
 import Confirm from "./components/ConfirmationPopout";
@@ -67,12 +67,15 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.setLoading(true)
     getUserInfo().then((res) => {
       this.props.getProfile(res);
     });
-    this.props.setLoading(true)
     auth(window.location.search)
       .then((res) => {
+        if (res.data.result.new) {
+          account(this.props.profile).catch(e => console.log(e))
+        }
         localStorage.setItem("user_ro", res.data.result.token);
         polls()
           .then((res) => {
@@ -164,6 +167,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return {
     snackbar: state.data.snackbar,
+    profile: state.data.profile,
     colorScheme: state.data.colorScheme,
     isOnboardingViewed: state.data.isOnboardingViewed,
     data: state.data.data,
