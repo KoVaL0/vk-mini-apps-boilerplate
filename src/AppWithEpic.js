@@ -31,7 +31,7 @@ import {
   MODAL_SETTINGS,
 } from "./router";
 import "./App.css";
-import { auth, poll } from "./api";
+import { account, auth, poll } from "./api";
 import { withRouter } from "@happysanta/router";
 import { getUserInfo, isIntroViewed } from "./api/vk/index";
 import Confirm from "./components/ConfirmationPopout";
@@ -49,12 +49,12 @@ import {
   setIsOnboardingViewed,
   setNotifications,
   setData,
+  setLoading,
 } from "./store/data/actions";
 import PayModalCard from "./components/PayModalCard";
 import InfoModalCard from "./components/InfoModalCard";
 import SettingsModalCard from "./components/SettingsModalCard";
 import { polls } from "./api/rest/polls";
-import { account } from "./api/rest/account";
 
 class App extends React.Component {
   popout() {
@@ -67,11 +67,13 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.setLoading(true);
     getUserInfo().then((user) => {
-      const isNotificationsEnabled = window.location.search
-        .split("vk_are_notifications_enabled=")[1]
-        .split("")[0];
-      this.props.setNotifications(+isNotificationsEnabled);
+      this.props.setNotifications(
+        +window.location.search
+          .split("vk_are_notifications_enabled=")[1]
+          .split("")[0],
+      );
       this.props.getProfile(user);
       auth(window.location.search).then((res) => {
         localStorage.setItem("user_ro", res.data.result.token);
@@ -87,9 +89,12 @@ class App extends React.Component {
             photo: user.photo_100,
           });
         }
-        polls().then((res) => {
-          this.props.setData(res.data.result.polls);
-        });
+
+        polls()
+          .then((res) => {
+            this.props.setData(res.data.result.polls);
+          })
+          .finally(() => this.props.setLoading(false));
       });
     });
 
@@ -154,15 +159,13 @@ class App extends React.Component {
                   popout={popout}
                 />
 
-                {this.props.data.quiz.length > 0 && (
-                  <Main
-                    activePanel={location.getViewActivePanel(VIEW_MAIN)}
-                    history={location.getViewHistory(VIEW_MAIN)}
-                    id={VIEW_MAIN}
-                    modal={modal}
-                    popout={popout}
-                  />
-                )}
+                <Main
+                  activePanel={location.getViewActivePanel(VIEW_MAIN)}
+                  history={location.getViewHistory(VIEW_MAIN)}
+                  id={VIEW_MAIN}
+                  modal={modal}
+                  popout={popout}
+                />
               </Epic>
               {snackbar}
             </Panel>
@@ -176,6 +179,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return {
     snackbar: state.data.snackbar,
+    profile: state.data.profile,
     colorScheme: state.data.colorScheme,
     isOnboardingViewed: state.data.isOnboardingViewed,
     data: state.data.data,
@@ -187,7 +191,13 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
     ...bindActionCreators(
-      { setIsOnboardingViewed, getProfile, setNotifications, setData },
+      {
+        setIsOnboardingViewed,
+        getProfile,
+        setNotifications,
+        setData,
+        setLoading,
+      },
       dispatch,
     ),
   };

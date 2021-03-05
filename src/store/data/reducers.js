@@ -14,12 +14,14 @@ import {
   SET_COUNTRY,
   SET_QUIZ,
   SET_BALANCE,
+  REMOVE_QUIZ,
+  LOADING_QUIZ,
 } from "./actionTypes";
 
 const initialState = {
   colorScheme: "client_light",
   isOnboardingViewed: true,
-  isNotificationsEnabled: false,
+  isNotificationsEnabled: true,
   snackbar: null,
   cities: [
     {
@@ -107,6 +109,7 @@ const initialState = {
       label: "Симферополь",
     },
   ],
+  loading: false,
   profile: {
     city: null,
     country: null,
@@ -219,6 +222,23 @@ export const dataReducer = (state = initialState, action) => {
       return {
         ...state,
         blockView: action.payload.data,
+      };
+    }
+    case LOADING_QUIZ: {
+      return {
+        ...state,
+        loading: action.payload.data,
+      };
+    }
+    case REMOVE_QUIZ: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          quiz: state.data.quiz.filter(
+            (quiz) => quiz.id !== action.payload.data,
+          ),
+        },
       };
     }
     default: {

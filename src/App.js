@@ -34,7 +34,7 @@ import AboutModalCard from "./components/AboutModalCard";
 import HistoryModalPage from "./components/HistoryModalPage";
 import InfoModalCard from "./components/InfoModalCard";
 import { saveCredentials } from "./services";
-import { getProfile, setNotifications } from "./store/data/actions";
+import { getProfile, setLoading, setNotifications } from "./store/data/actions";
 import PayModalCard from "./components/PayModalCard";
 
 class App extends React.Component {
@@ -53,16 +53,14 @@ class App extends React.Component {
       this.props.getProfile(res);
     });
 
-    auth(window.location.search)
-      .then(async (resp) => {
-        saveCredentials(resp);
-        if ((await isIntroViewed()) === "viewed") {
-          router.replacePage(PAGE_MAIN);
-        } else {
-          router.replacePage(PAGE_INTRO);
-        }
-      })
-      .finally(() => {});
+    auth(window.location.search).then(async (resp) => {
+      saveCredentials(resp);
+      if ((await isIntroViewed()) === "viewed") {
+        router.replacePage(PAGE_MAIN);
+      } else {
+        router.replacePage(PAGE_INTRO);
+      }
+    });
   }
 
   render() {
@@ -108,7 +106,10 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    ...bindActionCreators({ getProfile, setNotifications }, dispatch),
+    ...bindActionCreators(
+      { getProfile, setNotifications, setLoading },
+      dispatch,
+    ),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

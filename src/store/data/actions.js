@@ -7,12 +7,14 @@ import {
   SET_BLOCK_VIEW,
   SET_CITY,
   SET_COUNTRY,
-  SET_SEX,
-  SET_QUIZ,
   SET_COLOR_SCHEME,
   SET_SNACKBAR,
   SET_IS_ONBOARDING_VIEWED,
   SET_BALANCE,
+  SET_SEX,
+  SET_QUIZ,
+  REMOVE_QUIZ,
+  LOADING_QUIZ,
 } from "./actionTypes";
 
 export const setColorScheme = (inputData) => ({
@@ -108,6 +110,20 @@ export const setSex = (inputData) => ({
 
 export const setQuiz = (inputData) => ({
   type: SET_QUIZ,
+  payload: {
+    data: inputData,
+  },
+});
+
+export const removeQuiz = (inputData) => ({
+  type: REMOVE_QUIZ,
+  payload: {
+    data: inputData,
+  },
+});
+
+export const setLoading = (inputData) => ({
+  type: LOADING_QUIZ,
   payload: {
     data: inputData,
   },

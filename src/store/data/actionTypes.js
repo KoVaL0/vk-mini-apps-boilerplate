@@ -15,4 +15,6 @@ export const SET_CITY = "SET_CITY";
 export const SET_COUNTRY = "SET_COUNTRY";
 export const SET_SEX = "SET_SEX";
 export const SET_QUIZ = "SET_QUIZ";
+export const REMOVE_QUIZ = "REMOVE_QUIZ";
+export const LOADING_QUIZ = "LOADING_QUIZ";
 export const SET_BALANCE = "SET_BALANCE";
