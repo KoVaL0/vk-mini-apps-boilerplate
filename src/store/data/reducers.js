@@ -11,7 +11,9 @@ import {
   SET_BLOCK_VIEW,
   SET_CITY,
   SET_SEX,
-  SET_COUNTRY, SET_QUIZ,
+  SET_COUNTRY,
+  SET_QUIZ,
+  SET_BALANCE,
 } from "./actionTypes";
 
 const initialState = {
@@ -19,6 +21,92 @@ const initialState = {
   isOnboardingViewed: true,
   isNotificationsEnabled: false,
   snackbar: null,
+  cities: [
+    {
+      value: "Санкт-Петербург",
+      label: "Санкт-Петербург",
+    },
+    {
+      value: "Москва",
+      label: "Москва",
+    },
+    {
+      value: "Волгоград",
+      label: "Волгоград",
+    },
+    {
+      value: "Владивосток",
+      label: "Владивосток",
+    },
+    {
+      value: "Воронеж",
+      label: "Воронеж",
+    },
+    {
+      value: "Екатеринбург",
+      label: "Екатеринбург",
+    },
+    {
+      value: "Казань",
+      label: "Казань",
+    },
+    {
+      value: "Калининград",
+      label: "Калининград",
+    },
+    {
+      value: "Краснодар",
+      label: "Краснодар",
+    },
+    {
+      value: "Красноярск",
+      label: "Красноярск",
+    },
+    {
+      value: "Нижний Новгород",
+      label: "Нижний Новгород",
+    },
+    {
+      value: "Новосибирск",
+      label: "Новосибирск",
+    },
+    {
+      value: "Омск",
+      label: "Омск",
+    },
+    {
+      value: "Пермь",
+      label: "Пермь",
+    },
+    {
+      value: "Ростов-на-Дону",
+      label: "Ростов-на-Дону",
+    },
+    {
+      value: "Самара",
+      label: "Самара",
+    },
+    {
+      value: "Уфа",
+      label: "Уфа",
+    },
+    {
+      value: "Хабаровск",
+      label: "Хабаровск",
+    },
+    {
+      value: "Челябинск",
+      label: "Челябинск",
+    },
+    {
+      value: "Севастополь",
+      label: "Севастополь",
+    },
+    {
+      value: "Симферополь",
+      label: "Симферополь",
+    },
+  ],
   profile: {
     city: null,
     country: null,
@@ -29,9 +117,10 @@ const initialState = {
   activeQuiz: null,
   data: {
     slideIndex: null,
-    quiz: []
+    quiz: [],
   },
-  quiz: []
+  quiz: [],
+  balance: 0,
 };
 
 export const dataReducer = (state = initialState, action) => {
@@ -52,6 +141,12 @@ export const dataReducer = (state = initialState, action) => {
       return {
         ...state,
         isOnboardingViewed: action.payload.data,
+      };
+    }
+    case SET_BALANCE: {
+      return {
+        ...state,
+        balance: action.payload.data,
       };
     }
     case SET_IS_NOTIFICATIONS_ENABLED: {
@@ -75,19 +170,25 @@ export const dataReducer = (state = initialState, action) => {
     case SET_COUNTRY: {
       return {
         ...state,
-        profile: {...state.profile, country: {title: action.payload.data}},
+        profile: {
+          ...state.profile,
+          country: { title: action.payload.data },
+        },
       };
     }
     case SET_SEX: {
       return {
         ...state,
-        profile: {...state.profile, sex: action.payload.data},
+        profile: { ...state.profile, sex: action.payload.data },
       };
     }
     case SET_CITY: {
       return {
         ...state,
-        profile: {...state.profile, city: {title: action.payload.data}},
+        profile: {
+          ...state.profile,
+          city: { title: action.payload.data },
+        },
       };
     }
     case SET_ACTIVE_QUIZ: {
@@ -105,13 +206,13 @@ export const dataReducer = (state = initialState, action) => {
     case SET_DATA: {
       return {
         ...state,
-        data: {...state.data, quiz: action.payload.data}
+        data: { ...state.data, quiz: action.payload.data },
       };
     }
     case SET_QUIZ: {
       return {
         ...state,
-        quiz: action.payload.data
+        quiz: action.payload.data,
       };
     }
     case SET_BLOCK_VIEW: {

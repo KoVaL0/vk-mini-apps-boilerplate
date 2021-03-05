@@ -1,41 +1,52 @@
-import {Alert, Button, Caption, Card, Div, Text} from '@vkontakte/vkui';
-import React from 'react';
-import {useRouter} from '@happysanta/router';
-import {connect} from 'react-redux';
-import {Icon20UsersOutline} from "@vkontakte/icons";
-import {bindActionCreators} from "redux";
-import {setNotifications} from "../store/data/actions";
-import {PAGE_MAIN} from "../router";
+import { Alert, Button, Caption, Card, Div, Text } from "@vkontakte/vkui";
+import React from "react";
+import { useRouter } from "@happysanta/router";
+import { connect } from "react-redux";
+import { Icon20UsersOutline } from "@vkontakte/icons";
+import { bindActionCreators } from "redux";
+import { setNotifications } from "../store/data/actions";
+import { PAGE_MAIN } from "../router";
+import { allowVKNotifications } from "../api/vk";
 
 function Confirm(props) {
-
+  const enableNotifications = () => {
+    allowVKNotifications()
+      .then((res) => {
+        this.props.setNotifications(!this.props.notifications);
+      })
+      .finally(() => {
+        handlerClick();
+      });
+  };
   const router = useRouter();
   const handlerClick = () => {
-    router.replacePopup(null)
-    router.replacePage(PAGE_MAIN)
-  }
+    router.replacePopup(null);
+    router.replacePage(PAGE_MAIN);
+  };
 
   return (
     <Alert
       actions={[
         {
-          title: 'Закрыть',
+          title: "Закрыть",
           autoclose: true,
-          mode: 'cancel',
+          mode: "cancel",
         },
       ]}
       onClose={() => handlerClick()}
     >
-      <h2>Вы ещё не подписаны на уведомления!</h2>
-      <Card className={`history ${props.notifications ? 'active' : 'disabled'}`}>
+      <Text>Вы ещё не подписаны на уведомления!</Text>
+      <Card
+        className={`history ${props.notifications ? "active" : "disabled"}`}
+      >
         <Div>
           <div className="d-flex align-center">
-            {' '}
-            <Icon20UsersOutline fill="#fff" width={16} height={16}/>{' '}
+            {" "}
+            <Icon20UsersOutline fill="#fff" width={16} height={16} />{" "}
             <Caption
               level="2"
               weight="regular"
-              style={{color: 'white', marginLeft: 8}}
+              style={{ color: "white", marginLeft: 8 }}
             >
               УВЕДОМЛЕНИЯ
             </Caption>
@@ -43,22 +54,19 @@ function Confirm(props) {
           <Text
             className="history__count history-action"
             weight="medium"
-            style={{color: "#fff", margin: "8px 0"}}
+            style={{ color: "#fff", margin: "8px 0" }}
           >
             {!props.notifications
-              ? 'Включите уведомления, чтобы проходить опросы одними из первых, и зарабатывать больше баллов!'
-              : 'Уведомления включены'}
+              ? "Включите уведомления, чтобы проходить опросы одними из первых, и зарабатывать больше баллов!"
+              : "Уведомления включены"}
           </Text>
           <Button
             size="s"
             stretched={"true"}
             className="action-button"
-            onClick={() => {
-              props.setNotifications(!props.notifications)
-              handlerClick()
-            }}
+            onClick={enableNotifications}
           >
-            {props.notifications ? 'Отключить' : 'Включить'}
+            {props.notifications ? "Отключить" : "Включить"}
           </Button>
         </Div>
       </Card>
@@ -75,9 +83,12 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    ...bindActionCreators({
-      setNotifications,
-    }, dispatch),
+    ...bindActionCreators(
+      {
+        setNotifications,
+      },
+      dispatch,
+    ),
   };
 }
 

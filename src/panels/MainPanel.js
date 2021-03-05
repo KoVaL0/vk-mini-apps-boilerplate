@@ -25,11 +25,14 @@ import { MODAL_INFO, PAGE_QUIZ } from "../router";
 import "./home.css";
 import { Icon20UsersOutline, Icon24Info } from "@vkontakte/icons";
 import logo from "../img/logo.png";
+import { allowVKNotifications } from "../api/vk";
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.props.data;
+
+    this.enableNotifications = this.enableNotifications.bind(this);
   }
 
   removeItem = (id) => {
@@ -44,11 +47,16 @@ class Home extends React.Component {
     );
   };
 
-  componentDidMount() {
-    if (!this.props.notifications) {
-      this.props.setBlockView(true);
-    } else setTimeout(() => this.props.setBlockView(false), 1000);
+  enableNotifications() {
+    allowVKNotifications().then((res) => {
+      this.props.setNotifications(!this.props.notifications);
+      setTimeout(() => {
+        this.props.setBlockView(false);
+      }, 1000);
+    });
   }
+
+  componentDidMount() {}
 
   render() {
     const { id, router, notifications } = this.props;
@@ -66,7 +74,7 @@ class Home extends React.Component {
         >
           <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
         </PanelHeader>
-        {this.props.blockView && (
+        {Boolean(!this.props.notifications) && (
           <Div className={`notification ${!notifications ? "show" : "hide"}`}>
             <Card
               className={`history ${notifications ? "active" : "disabled"}`}
@@ -96,12 +104,7 @@ class Home extends React.Component {
                   size="s"
                   stretched={"true"}
                   className="action-button"
-                  onClick={() => {
-                    this.props.setNotifications(!this.props.notifications);
-                    setTimeout(() => {
-                      this.props.setBlockView(false);
-                    }, 1000);
-                  }}
+                  onClick={this.enableNotifications}
                 >
                   {this.props.notifications ? "Отключить" : "Включить"}
                 </Button>
@@ -112,14 +115,14 @@ class Home extends React.Component {
         <Group
           mode="plain"
           header={
-            <Title mode="secondary" style={{margin: "0 16px", color: "grey"}}>
+            <Title mode="secondary" style={{ margin: "0 16px", color: "grey" }}>
               Доступные опросы
             </Title>
           }
         >
           <CardGrid size="l">
             {this.state.quiz.map((quiz, id) => (
-              <div key={id} style={{width: "100%", margin: "8px 0"}}>
+              <div key={id} style={{ width: "100%", margin: "8px 0" }}>
                 {quiz.type === "reusable" ? (
                   <ContentCard
                     image={quiz.cover}
@@ -128,7 +131,7 @@ class Home extends React.Component {
                     text={"Ваше мнение очень важно"}
                     onClick={() => {
                       this.props.setActiveQuiz(quiz.id);
-                      router.pushPage(PAGE_QUIZ, {id: quiz.id});
+                      router.pushPage(PAGE_QUIZ, { id: quiz.id });
                     }}
                   />
                 ) : (
@@ -140,7 +143,7 @@ class Home extends React.Component {
                     <Title
                       level={"3"}
                       weight="bold"
-                      style={{padding: "10px 20px"}}
+                      style={{ padding: "10px 20px" }}
                     >
                       {quiz.text}
                     </Title>

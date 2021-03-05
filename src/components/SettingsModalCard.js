@@ -1,16 +1,27 @@
-import {Alert, Button, Select, FormItem, SelectMimicry, FormLayout, Group, ModalCard, Div} from '@vkontakte/vkui';
-import React, {Component} from 'react';
-import {useRouter, withRouter} from '@happysanta/router';
-import {connect} from 'react-redux';
-import {bindActionCreators} from "redux";
-import {setCountry, setCity, setSex} from "../store/data/actions";
+import {
+  Alert,
+  Button,
+  Select,
+  FormItem,
+  SelectMimicry,
+  FormLayout,
+  Group,
+  ModalCard,
+  Div,
+} from "@vkontakte/vkui";
+import React, { Component } from "react";
+import { useRouter, withRouter } from "@happysanta/router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { setCountry, setCity, setSex } from "../store/data/actions";
+import { account } from "./../api/rest/account";
 
 class SettingsModalCard extends Component {
   constructor(props) {
     super(props);
-    this.city = this.props.profile.city.title
-    this.country = this.props.profile.country.title
-    this.sex = this.props.profile.sex
+    this.city = this.props.profile.city.title;
+    this.country = this.props.profile.country.title;
+    this.sex = this.props.profile.sex;
   }
 
   handlerClick = () => {
@@ -19,16 +30,18 @@ class SettingsModalCard extends Component {
         city: this.city,
         country: this.country,
         sex: this.sex,
-      }
-      this.props.setCity(this.city)
-      this.props.setCountry(this.country)
-      this.props.setSex(this.sex)
-      console.log(data)
-      this.props.router.popPage()
+      };
+      this.props.setCity(this.city);
+      this.props.setCountry(this.country);
+      this.props.setSex(this.sex.id);
+      console.log(data);
+      account(data).then((res) => {
+        this.props.router.popPage();
+      });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
+  };
 
   render() {
     return (
@@ -40,37 +53,47 @@ class SettingsModalCard extends Component {
         <FormLayout>
           <FormItem top="Страна">
             <Select
-              onChange={(e) => {this.country = e.target.value}}
+              onChange={(e) => {
+                this.country = { id: 0, title: e.target.value };
+              }}
               placeholder="Выберите страну"
-              options={[{
-                value: 'Россия', label: 'Россия'
-              }, {
-                value: 'Беларусь', label: 'Беларусь'
-              }
+              options={[
+                {
+                  value: "Россия",
+                  label: "Россия",
+                },
+                {
+                  value: "Беларусь",
+                  label: "Беларусь",
+                },
               ]}
             />
           </FormItem>
           <FormItem top="Город">
             <Select
-              onChange={(e) => {this.city = e.target.value}}
+              onChange={(e) => (this.city = { id: 0, title: e.target.value })}
               placeholder="Выберите город"
-              options={[{
-                value: 'Москва', label: 'Москва'
-              }, {
-                value: 'Санкт-Петербург', label: 'Санкт-Петербург'
-              }
-              ]}
+              options={this.props.cities}
             />
           </FormItem>
-          <FormItem top="Пол" style={{marginBottom: "3%"}}>
+          <FormItem top="Пол" style={{ marginBottom: "3%" }}>
             <Select
-              onChange={(e) => {this.sex = +e.target.value}}
+              onChange={(e) => {
+                this.sex = {
+                  id: e.target.value,
+                  title: e.target.value === 1 ? "Женский" : "Мужской",
+                };
+              }}
               placeholder="Выберите пол"
-              options={[{
-                value: 2, label: 'Мужской'
-              }, {
-                value: 1, label: 'Женский'
-              }
+              options={[
+                {
+                  value: 2,
+                  label: "Мужской",
+                },
+                {
+                  value: 1,
+                  label: "Женский",
+                },
               ]}
             />
           </FormItem>
@@ -79,7 +102,7 @@ class SettingsModalCard extends Component {
               stretched={"true"}
               size={"m"}
               onClick={() => {
-                this.handlerClick()
+                this.handlerClick();
               }}
             >
               Потвердить
@@ -94,18 +117,25 @@ class SettingsModalCard extends Component {
 const mapStateToProps = (state) => {
   return {
     profile: state.data.profile,
+    cities: state.data.cities,
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    ...bindActionCreators({
-      setCountry,
-      setCity,
-      setSex,
-    }, dispatch),
+    ...bindActionCreators(
+      {
+        setCountry,
+        setCity,
+        setSex,
+      },
+      dispatch,
+    ),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SettingsModalCard));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(SettingsModalCard));

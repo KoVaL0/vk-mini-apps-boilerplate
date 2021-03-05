@@ -34,6 +34,9 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
+    if (response.data.error) {
+      return Promise.reject(response);
+    }
     return response;
   },
   async (error) => {
@@ -41,7 +44,6 @@ instance.interceptors.response.use(
       if (error.toJSON().message === "Network Error") {
       } else if (error.toJSON().message.includes("timeout")) {
       } else if (error.response.status === 401) {
-        // localStorage.removeItem('user_rc');
         delete axios.defaults.headers.common["Authorization"];
       } else {
       }

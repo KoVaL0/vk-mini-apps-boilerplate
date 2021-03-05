@@ -25,10 +25,22 @@ import {
 } from "@vkontakte/icons";
 import logo from "../img/logo.png";
 import { setNotifications } from "../store/data/actions";
+import { allowVKNotifications } from "../api/vk";
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.enableNotifications = this.enableNotifications.bind(this);
+  }
+
+  enableNotifications() {
+    allowVKNotifications().then((res) => {
+      this.props.setNotifications(!this.props.notifications);
+    });
+  }
   render() {
     const { id, profile, router, notifications } = this.props;
+    console.log("red", profile);
 
     return (
       <Panel id={id}>
@@ -56,7 +68,7 @@ class Home extends React.Component {
                 {profile.first_name} {profile.last_name}
               </Title>
               <Text className="profile__link" weight="regular">
-                12 баллов
+                {this.props.balance}
               </Text>
             </div>
           </div>
@@ -99,9 +111,9 @@ class Home extends React.Component {
                 onClick={() => router.pushModal(MODAL_SETTINGS)}
                 style={{ color: "#8f99a4" }}
               >
-                {this.props.profile.sex === 1
+                {this.props.profile.sex == 1
                   ? "Женский"
-                  : this.props.profile.sex === 2
+                  : this.props.profile.sex == 2
                   ? "Мужской"
                   : "Пол не указан"}
                 <Icon12ChevronOutline />
@@ -124,7 +136,7 @@ class Home extends React.Component {
               </Link>
             }
           >
-            12 баллов
+            {this.props.balance} баллов
           </Header>
         </Group>
         <Div>
@@ -155,9 +167,7 @@ class Home extends React.Component {
                 size="s"
                 stretched={"true"}
                 className="action-button"
-                onClick={() => {
-                  this.props.setNotifications(!this.props.notifications);
-                }}
+                onClick={this.enableNotifications}
               >
                 {this.props.notifications ? "Отключить" : "Включить"}
               </Button>
@@ -173,6 +183,7 @@ const mapStateToProps = (state) => {
   return {
     profile: state.data.profile,
     notifications: state.data.notifications,
+    balance: state.data.balance,
   };
 };
 

@@ -19,6 +19,10 @@ export const getUserInfo = () => {
   return api.getUserInfo();
 };
 
+export const allowVKNotifications = () => {
+  return api.allowNotifications();
+};
+
 export const tapticNotification = (type) => {
   api.bridge.send("VKWebAppTapticNotificationOccurred", { type });
 };

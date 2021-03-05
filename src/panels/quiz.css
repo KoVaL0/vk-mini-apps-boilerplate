@@ -1,10 +1,16 @@
 .quiz-image {
-    background-size: cover;
-    height: 200px;
-    width: 100%;
-    border-radius: 10px;
-    line-height: 350px;
-    font-weight: bold;
-    font-size: 20px;
-    color: dodgerblue;
+  background-size: cover;
+  height: 200px;
+  width: 100%;
+  line-height: 350px;
+  font-weight: bold;
+  font-size: 20px;
+  color: dodgerblue;
+}
+
+.Gallery__slide > * {
+  width: auto !important;
+}
+.align-cetner {
+  align-items: center;
 }

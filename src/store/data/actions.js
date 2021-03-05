@@ -1,9 +1,4 @@
 import {
-  SET_COLOR_SCHEME,
-  SET_SNACKBAR,
-  SET_IS_ONBOARDING_VIEWED,
-} from "./actionTypes.js";
-import {
   SET_ACTIVE_QUIZ,
   SET_NOTIFICATIONS,
   SET_PROFILE,
@@ -12,7 +7,12 @@ import {
   SET_BLOCK_VIEW,
   SET_CITY,
   SET_COUNTRY,
-  SET_SEX, SET_QUIZ,
+  SET_SEX,
+  SET_QUIZ,
+  SET_COLOR_SCHEME,
+  SET_SNACKBAR,
+  SET_IS_ONBOARDING_VIEWED,
+  SET_BALANCE,
 } from "./actionTypes";
 
 export const setColorScheme = (inputData) => ({
@@ -22,8 +22,7 @@ export const setColorScheme = (inputData) => ({
   },
 });
 
-export const setSnackbar = (inputData) => (
-  {
+export const setSnackbar = (inputData) => ({
   type: SET_SNACKBAR,
   payload: {
     data: inputData,
@@ -42,11 +41,17 @@ export const getProfile = (data) => ({
   payload: {
     data: data,
   },
-
 });
 
 export const setNotifications = (inputData) => ({
   type: SET_NOTIFICATIONS,
+  payload: {
+    data: inputData,
+  },
+});
+
+export const setBalance = (inputData) => ({
+  type: SET_BALANCE,
   payload: {
     data: inputData,
   },

@@ -54,6 +54,7 @@ import PayModalCard from "./components/PayModalCard";
 import InfoModalCard from "./components/InfoModalCard";
 import SettingsModalCard from "./components/SettingsModalCard";
 import { polls } from "./api/rest/polls";
+import { account } from "./api/rest/account";
 
 class App extends React.Component {
   popout() {
@@ -66,20 +67,31 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    getUserInfo().then((res) => {
-      this.props.getProfile(res);
-    });
-    console.log(window.location.search);
-    auth(window.location.search)
-      .then((res) => {
+    getUserInfo().then((user) => {
+      const isNotificationsEnabled = window.location.search
+        .split("vk_are_notifications_enabled=")[1]
+        .split("")[0];
+      this.props.setNotifications(+isNotificationsEnabled);
+      this.props.getProfile(user);
+      auth(window.location.search).then((res) => {
         localStorage.setItem("user_ro", res.data.result.token);
-        polls()
-          .then((res) => {
-            this.props.setData(res.data.result.polls);
-          })
-          .catch((e) => console.log(e));
-      })
-      .catch((e) => console.log(e, "Auth"));
+        if (res.data.result.new) {
+          account({
+            name: user.first_name,
+            surname: user.last_name,
+            sex: user.sex,
+            city: user.city,
+            country: user.country,
+            bdate: user.bdate,
+            timezone: user.timezone,
+            photo: user.photo_100,
+          });
+        }
+        polls().then((res) => {
+          this.props.setData(res.data.result.polls);
+        });
+      });
+    });
 
     if ((await isIntroViewed()) === "viewed") {
       router.replacePage(PAGE_MAIN);
@@ -167,6 +179,7 @@ const mapStateToProps = (state) => {
     colorScheme: state.data.colorScheme,
     isOnboardingViewed: state.data.isOnboardingViewed,
     data: state.data.data,
+    profile: state.data.profile,
   };
 };
 

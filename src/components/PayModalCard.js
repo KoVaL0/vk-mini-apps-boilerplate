@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "@happysanta/router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {Button, Div, ModalCard, Text,} from "@vkontakte/vkui";
+import { Button, Div, ModalCard, Text } from "@vkontakte/vkui";
 
 class PayModalCard extends Component {
   render() {
@@ -12,14 +12,14 @@ class PayModalCard extends Component {
         onClose={() => this.props.router.popPage()}
         header="Вывод средств"
       >
-        <Div align={"center"}>
-          <Text style={{marginBottom: "20px"}}>
-            К выводу доступно 12 баллов
+        <Div>
+          <Text style={{ marginBottom: "20px" }}>
+            К выводу доступно {this.props.balance} баллов. Вывод средств будет
+            реализован через несколько месяцев. Все баллы за пройденные опросы
+            сохраняются, обменять их можно будет совсем скоро.
           </Text>
-          <Button
-            onClick={() => (this.props.router.popPage())}
-          >
-            Вывод
+          <Button stretched onClick={() => this.props.router.popPage()}>
+            Понятно
           </Button>
         </Div>
       </ModalCard>
@@ -28,7 +28,9 @@ class PayModalCard extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    balance: state.data.balance,
+  };
 };
 
 function mapDispatchToProps(dispatch) {

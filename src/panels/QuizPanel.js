@@ -47,7 +47,7 @@ class QuizPanel extends React.Component {
         }
         this.props.setQuiz(res.data.result.polls);
         this.props.router.replacePopup(null);
-        this.setState({loading: true});
+        this.setState({ loading: true });
       })
       .catch((e) => {
         console.log(e);
@@ -83,8 +83,7 @@ class QuizPanel extends React.Component {
         {this.state.loading ? (
           <div>
             <div>
-              <CardGrid
-                size="l"
+              <div
                 className={"quiz-image"}
                 style={{ backgroundImage: `url(${this.props.quiz.cover})` }}
               />
@@ -123,7 +122,7 @@ class QuizPanel extends React.Component {
                   {this.props.quiz.time / 60} мин.
                 </div>
               </Div>
-              <Div>{this.quiz?.description}</Div>
+              <Div>{this.props.quiz.description}</Div>
             </div>
             <Div align={"center"}>
               <Button
