@@ -20,18 +20,16 @@ import {
   MODAL_ABOUT,
   POPOUT_CONFIRM,
   PAGE_MAIN,
-  PAGE_INTRO,
   MODAL_HISTORY,
   POPOUT_SPINNER,
   PAGE_PROFILE,
   VIEW_PROFILE,
   MODAL_PAY,
   MODAL_INFO,
-  MODAL_QUIZ,
   MODAL_SETTINGS,
 } from "./router";
 import "./App.css";
-import { account, auth, poll } from "./api";
+import { account, auth, polls} from "./api";
 import { withRouter } from "@happysanta/router";
 import { getUserInfo, isIntroViewed } from "./api/vk/index";
 import Confirm from "./components/ConfirmationPopout";
@@ -50,11 +48,11 @@ import {
   setNotifications,
   setData,
   setLoading,
+  setBalance,
 } from "./store/data/actions";
 import PayModalCard from "./components/PayModalCard";
 import InfoModalCard from "./components/InfoModalCard";
 import SettingsModalCard from "./components/SettingsModalCard";
-import { polls } from "./api/rest/polls";
 
 class App extends React.Component {
   popout() {
@@ -74,9 +72,8 @@ class App extends React.Component {
           .split("vk_are_notifications_enabled=")[1]
           .split("")[0],
       );
-      this.props.getProfile(user);
-      auth(window.location.search).then((res) => {
-        localStorage.setItem("user_ro", res.data.result.token);
+      auth(window.location.search).then(( res) => {
+        localStorage.setItem( "user_ro", res.data.result.token );
         if (res.data.result.new) {
           account({
             name: user.first_name,
@@ -88,7 +85,21 @@ class App extends React.Component {
             timezone: user.timezone,
             photo: user.photo_100,
           });
+        } else {
+          account().then( res => {
+            this.props.getProfile({
+              name: res.data.result.name,
+              surname: res.data.result.surname,
+              sex: res.data.result.sex,
+              city: res.data.result.city,
+              country: res.data.result.country,
+              bdate: res.data.result.bdate,
+              timezone: res.data.result.timezone,
+              photo: res.data.result.photo,
+            })
+          })
         }
+        this.props.setBalance(res.data.result.balance);
 
         polls()
           .then((res) => {
@@ -179,11 +190,10 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return {
     snackbar: state.data.snackbar,
-    profile: state.data.profile,
     colorScheme: state.data.colorScheme,
+    profile: state.data.profile,
     isOnboardingViewed: state.data.isOnboardingViewed,
     data: state.data.data,
-    profile: state.data.profile,
   };
 };
 
@@ -197,6 +207,7 @@ function mapDispatchToProps(dispatch) {
         setNotifications,
         setData,
         setLoading,
+        setBalance,
       },
       dispatch,
     ),

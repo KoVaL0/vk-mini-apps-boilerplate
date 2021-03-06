@@ -15,19 +15,18 @@ import {
   File,
   Snackbar,
   Title,
-  FixedLayout,
 } from "@vkontakte/vkui";
 import {
   setActiveAnswer,
   setSnackbar,
   removeQuiz,
+  setBalance,
 } from "../store/data/actions";
 import { withRouter } from "@happysanta/router";
 import { PAGE_MAIN, POPOUT_CONFIRM, POPOUT_SPINNER } from "../router";
 import "./home.css";
 import {
   Icon16ErrorCircleFill,
-  Icon24ArrowDownOutline,
   Icon24ArrowRightOutline,
   Icon24BrowserBack,
   Icon24Document,
@@ -69,6 +68,7 @@ class QuizCardPanel extends React.Component {
   };
 
   handlerEnd = async () => {
+    this.props.setBalance(this.props.balance + this.props.quiz.award);
     if (!this.props.notifications) {
       await this.props.router.replacePopup(POPOUT_CONFIRM);
       this.props.removeQuiz(this.props.quiz.id);
@@ -457,6 +457,7 @@ const mapStateToProps = (state) => {
     snackbar: state.data.snackbar,
     notifications: state.data.notifications,
     profile: state.data.profile,
+    balance: state.data.balance,
   };
 };
 
@@ -468,6 +469,7 @@ function mapDispatchToProps(dispatch) {
         setActiveAnswer,
         setSnackbar,
         removeQuiz,
+        setBalance,
       },
       dispatch,
     ),

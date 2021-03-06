@@ -12,7 +12,7 @@ function Confirm(props) {
   const enableNotifications = () => {
     allowVKNotifications()
       .then((res) => {
-        this.props.setNotifications(!this.props.notifications);
+        props.setNotifications(!props.notifications);
       })
       .finally(() => {
         handlerClick();
@@ -42,7 +42,7 @@ function Confirm(props) {
         <Div>
           <div className="d-flex align-center">
             {" "}
-            <Icon20UsersOutline fill="#fff" width={16} height={16} />{" "}
+            <Icon20UsersOutline fill="#fff" width={16} height={16}/>{" "}
             <Caption
               level="2"
               weight="regular"
@@ -56,7 +56,7 @@ function Confirm(props) {
             weight="medium"
             style={{ color: "#fff", margin: "8px 0" }}
           >
-            {!props.notifications
+            { !props.notifications
               ? "Включите уведомления, чтобы проходить опросы одними из первых, и зарабатывать больше баллов!"
               : "Уведомления включены"}
           </Text>
@@ -66,7 +66,7 @@ function Confirm(props) {
             className="action-button"
             onClick={enableNotifications}
           >
-            {props.notifications ? "Отключить" : "Включить"}
+            { props.notifications ? "Отключить" : "Включить" }
           </Button>
         </Div>
       </Card>

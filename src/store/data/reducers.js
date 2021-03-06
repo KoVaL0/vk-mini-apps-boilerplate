@@ -175,7 +175,7 @@ export const dataReducer = (state = initialState, action) => {
         ...state,
         profile: {
           ...state.profile,
-          country: { title: action.payload.data },
+          country: action.payload.data,
         },
       };
     }
@@ -190,7 +190,7 @@ export const dataReducer = (state = initialState, action) => {
         ...state,
         profile: {
           ...state.profile,
-          city: { title: action.payload.data },
+          city: action.payload.data,
         },
       };
     }

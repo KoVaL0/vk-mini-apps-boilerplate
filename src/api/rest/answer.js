@@ -7,6 +7,6 @@ import axios from "../interceptor";
 export const answer = (poll, question, result) => {
   return axios.post("", {
     method: "polls.answer",
-    params: { poll, question, result },
+    params: { poll, question, answer: result },
   });
 };
