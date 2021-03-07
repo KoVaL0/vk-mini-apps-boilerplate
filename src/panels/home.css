@@ -1,3 +1,7 @@
+.Checkbox__content {
+  color: white;
+}
+
 .profile__photo {
   border-radius: 100px;
   height: 70px;
