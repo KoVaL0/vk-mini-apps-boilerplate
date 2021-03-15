@@ -23,6 +23,10 @@ export const allowVKNotifications = () => {
   return api.allowNotifications();
 };
 
+export const denyVKNotifications = () => {
+  return api.denyNotifications();
+};
+
 export const tapticNotification = (type) => {
   api.bridge.send("VKWebAppTapticNotificationOccurred", { type });
 };

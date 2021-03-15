@@ -49,7 +49,6 @@ class App extends React.Component {
 
   componentDidMount() {
     getUserInfo().then((res) => {
-      console.log(res);
       this.props.getProfile(res);
     });
 

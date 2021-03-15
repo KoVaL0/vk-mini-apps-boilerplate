@@ -72,10 +72,10 @@ class App extends React.Component {
           .split("vk_are_notifications_enabled=")[1]
           .split("")[0],
       );
-      auth(window.location.search).then(( res) => {
+      auth(window.location.search).then(async( res) => {
         localStorage.setItem( "user_ro", res.data.result.token );
         if (res.data.result.new) {
-          account({
+          await account({
             name: user.first_name,
             surname: user.last_name,
             sex: user.sex,
@@ -86,7 +86,7 @@ class App extends React.Component {
             photo: user.photo_100,
           });
         } else {
-          account().then( res => {
+          await account().then( res => {
             this.props.getProfile({
               name: res.data.result.name,
               surname: res.data.result.surname,

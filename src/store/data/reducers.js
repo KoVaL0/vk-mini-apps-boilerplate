@@ -119,7 +119,7 @@ const initialState = {
   activeAnswer: null,
   activeQuiz: null,
   data: {
-    slideIndex: null,
+    slideIndex: 0,
     quiz: [],
   },
   quiz: [],

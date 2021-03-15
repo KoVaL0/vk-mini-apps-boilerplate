@@ -136,7 +136,7 @@ class Home extends React.Component {
                         image={quiz.cover}
                         height={`${window.innerWidth / 2}`}
                         header={quiz.title}
-                        text={"Ваше мнение очень важно"}
+                        text={quiz.description}
                         onClick={() => {
                           this.props.setActiveQuiz(quiz.id);
                           router.pushPage(PAGE_QUIZ, { id: quiz.id });

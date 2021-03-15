@@ -33,9 +33,8 @@ class SettingsModalCard extends Component {
         tamezone: this.props.profile.timezone,
         city: this.city,
         country: this.country,
-        sex: this.sex,
+        sex: +this.sex,
       };
-      console.log(data);
       account(data).then(() => {
         this.props.router.popPage();
       });
@@ -58,7 +57,7 @@ class SettingsModalCard extends Component {
               onChange={(e) => {
                 this.country = {id: 0, title: e.target.value};
               }}
-              placeholder="Выберите страну"
+              placeholder={this.country.title}
               options={[
                 {
                   value: "Россия",
@@ -76,7 +75,7 @@ class SettingsModalCard extends Component {
               onChange={(e) => {
                 this.city = {id: 0, title: e.target.value}
               }}
-              placeholder="Выберите город"
+              placeholder={this.city.title}
               options={this.props.cities}
             />
           </FormItem>
@@ -85,7 +84,7 @@ class SettingsModalCard extends Component {
               onChange={(e) => {
                 this.sex = e.target.value
               }}
-              placeholder="Выберите пол"
+              placeholder={this.props.profile.sex === 1 ? "Женский" : this.props.profile.sex === 2 ? "Мужской" : "Пол не указан"}
               options={[
                 {
                   value: 2,

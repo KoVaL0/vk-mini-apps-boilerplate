@@ -11,10 +11,9 @@ class InfoCard extends Component {
         id={this.props.id}
         onClose={() => this.props.router.popPage()}
         header="О приложении"
-        subheader="Cum amor assimilant, omnes exemplares vitare barbatus,
-        salvus homoes.Nomen de azureus agripeta, examinare lixa!
-        A falsis, rumor gratis cacula.Xiphias magnum calcaria est.
-        Est peritus clabulare, cesaris.Monss cadunt!Planetas persuadere, tanquam velox zirbus."
+        subheader="Росопрос - приложение созданное для сбора статистики ответов населения на интересующие нас вопросы.
+        Проходя опросы, вы можете получать баллы, которые в последствии можно выводить в реальные рубли.
+        Помогайте улучшать вашу жизнь и получайте за это деньги!"
       >
       </ModalCard>
     );

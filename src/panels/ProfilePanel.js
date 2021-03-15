@@ -26,7 +26,7 @@ import {
 } from "@vkontakte/icons";
 import logo from "../img/logo.png";
 import { setNotifications } from "../store/data/actions";
-import { allowVKNotifications } from "../api/vk";
+import {allowVKNotifications, denyVKNotifications} from "../api/vk";
 
 class Home extends React.Component {
   constructor(props) {
@@ -35,14 +35,18 @@ class Home extends React.Component {
   }
 
   enableNotifications() {
-    allowVKNotifications().then((res) => {
-      this.props.setNotifications(!this.props.notifications);
+    if (this.props.notifications) {
+      denyVKNotifications().then((res) => {
+        this.props.setNotifications(!this.props.notifications);
+      });
+    } else {
+      allowVKNotifications().then((res) => {
+        this.props.setNotifications(!this.props.notifications);
     });
-  }
+  }}
 
   render() {
     const {id, profile, router, notifications} = this.props;
-    console.log("red", profile);
 
     return (
       <Panel id={id}>

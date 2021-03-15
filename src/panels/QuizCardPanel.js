@@ -86,7 +86,7 @@ class QuizCardPanel extends React.Component {
       third: false,
     };
     this.input = "";
-    this.file = "";
+    this.file = null;
     this.single = "";
   };
 
@@ -116,20 +116,20 @@ class QuizCardPanel extends React.Component {
   responseAnswer = (type, i) => {
     switch (type) {
       case "single": {
-        return this.single;
+        return [this.single];
       }
-      case "input": {
-        return this.input;
+      case "text": {
+        return [this.input];
       }
       case "file": {
-        return this.file;
+        return [this.file.data.split('base64,')[1], this.file.name];
       }
       case "multi": {
-        return this.answerMultiArr();
+        return [this.answerMultiArr()];
       }
       default: {
         return console.log(
-          `Неверно указан тип ответов!(single, multi, input, file) Ваш тип ${type}`,
+          `Неверно указан тип ответов!(single, multi, text, file) Ваш тип ${type}`,
         );
       }
     }
@@ -157,7 +157,7 @@ class QuizCardPanel extends React.Component {
       answer(
         this.props.index,
         this.props.quiz.questions[i].id,
-        this.responseAnswer(type, i),
+        ...this.responseAnswer(type, i),
       )
         .then(() => {
           this.props.router.replacePopup(POPOUT_SPINNER);
@@ -181,7 +181,7 @@ class QuizCardPanel extends React.Component {
             this.snackBar("Выберите один, либо несколько вариатов ответа!"),
           );
         }
-        case "input": {
+        case "text": {
           return this.props.setSnackbar(this.snackBar("Введите текст!"));
         }
         case "file": {
@@ -189,7 +189,7 @@ class QuizCardPanel extends React.Component {
         }
         default: {
           return console.log(
-            "Неверно указан тип ответов!(single, multi, input, file)",
+            "Неверно указан тип ответов!(single, multi, text, file)",
           );
         }
       }
@@ -235,14 +235,17 @@ class QuizCardPanel extends React.Component {
   handlerChangeFile = (e) => {
     if (e) {
       this.answer = true;
-      this.file = e;
       this.props.setActiveAnswer(0);
+      let reader = new FileReader();
+      reader.onloadend = () => {
+        this.file = {data: reader.result, name: e.name}
+      }
+      reader.readAsDataURL(e);
     }
   };
 
   render() {
-    const { id, profile, router, notifications } = this.props;
-
+    const { id, router, } = this.props;
     return (
       <Panel id={id}>
         <PanelHeader
@@ -259,19 +262,29 @@ class QuizCardPanel extends React.Component {
         <div
           style={{
             background: `linear-gradient(
-          rgba(0, 0, 0, 0.7), 
-          rgba(0, 0, 0, 0.7)
-        ), url(${this.props.quiz.cover})`,
-            backgroundSize: "cover",
-            minHeight: `${window.innerHeight - 104}px`,
-            overflow: "hidden",
+              rgba(0, 0, 0, 0.7), 
+              rgba(0, 0, 0, 0.7)
+            )`
           }}
         >
           <Gallery
             slideIndex={this.state.slideIndex}
             slideWidth="100%"
             align="right"
-            style={{ width: "100%", height: "100%" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundImage: `url(${(this.props.quiz?.questions[this.state.slideIndex]?.cover === undefined || this.props.quiz.questions[this.state.slideIndex].cover === "") ? (
+                  this.props.quiz.cover
+              ) : (
+                'https://rospoll.online/load/opt/' + this.props.quiz.questions[this.state.slideIndex].cover
+              )})`,
+              minHeight: `${window.innerHeight - 104}px`,
+              overflow: "hidden",
+            }}
           >
             {this.props.quiz.questions.map((item, quest_number) => (
               <div style={{ padding: "20px 16px" }} key={quest_number}>
@@ -336,7 +349,7 @@ class QuizCardPanel extends React.Component {
                         </Checkbox>
                       </React.Fragment>
                     ))
-                  ) : item.type === "text" || item.type === "input" ? (
+                  ) : item.type === "text" || item.type === "text" ? (
                     <Input
                       size="s"
                       stretched={"true"}

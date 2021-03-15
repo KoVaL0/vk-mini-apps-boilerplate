@@ -69,7 +69,6 @@ class QuizPanel extends React.Component {
         <PanelHeader
           style={{ textAlign: "center" }}
           separator={false}
-          popout={popout}
           left={
             <>
               <PanelHeaderButton onClick={() => router.pushPage(PAGE_MAIN)}>
