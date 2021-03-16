@@ -1,14 +1,14 @@
-import React, {Component} from "react";
-import {withRouter} from "@happysanta/router";
-import {connect} from "react-redux";
+import React, { Component } from "react";
+import { withRouter } from "@happysanta/router";
+import { connect } from "react-redux";
 import {
   setBalance,
   setSnackbar,
 } from "../store/data/actions";
-import {bindActionCreators} from "redux";
-import {Button, Div, FormItem, Input, ModalCard, SliderSwitch, Snackbar, Text} from "@vkontakte/vkui";
-import {Icon16ErrorCircleFill} from "@vkontakte/icons";
-import {withdrawal} from "../api/rest/withdrawal";
+import { bindActionCreators} from "redux";
+import { Button, Div, FormItem, Input, ModalCard, SliderSwitch, Snackbar, Text } from "@vkontakte/vkui";
+import { Icon20CheckCircleFillGreen, Icon16ErrorCircleFill } from "@vkontakte/icons";
+import { withdrawal } from "../api/rest/withdrawal";
 
 class PayModalCard extends Component {
 
@@ -88,7 +88,19 @@ class PayModalCard extends Component {
       } else if (this.state.activeValue === "card") {
         if (/\d{4}-\d{4}-\d{4}-\d{4}$/.test(this.state.card)) {
           withdrawal(3, this.state.card)
-            .then(this.props.setBalance(0))
+            .then(() => {
+              this.props.setBalance(0);
+              this.props.setSnackbar(
+                <Snackbar
+                onClose={() => this.props.setSnackbar(null)}
+                duration={2500}
+                before={<Icon20CheckCircleFillGreen width={24} height={24}/>}
+                onClick={() => this.props.setSnackbar(null)}
+              >
+                Поздравляем! Баллы успешно выведены!
+              </Snackbar>
+              );
+            })
             .catch(e => console.log(e));
           this.props.router.popPage();
         } else {
@@ -99,7 +111,7 @@ class PayModalCard extends Component {
       }
     } else {
       this.props.setSnackbar(
-        this.snackBar("Не хватает для вывода средств")
+        this.snackBar("Не хватает для вывода средств!")
       );
     }
   }
