@@ -118,7 +118,7 @@ class QuizCardPanel extends React.Component {
       case "single": {
         return [this.single];
       }
-      case "text": {
+      case "input" || "text": {
         return [this.input];
       }
       case "file": {
@@ -129,7 +129,7 @@ class QuizCardPanel extends React.Component {
       }
       default: {
         return console.log(
-          `Неверно указан тип ответов!(single, multi, text, file) Ваш тип ${type}`,
+          `Неверно указан тип ответов!(single, multi, input, file) Ваш тип ${type}`,
         );
       }
     }
@@ -181,7 +181,7 @@ class QuizCardPanel extends React.Component {
             this.snackBar("Выберите один, либо несколько вариатов ответа!"),
           );
         }
-        case "text": {
+        case "input" || "text": {
           return this.props.setSnackbar(this.snackBar("Введите текст!"));
         }
         case "file": {
@@ -189,7 +189,7 @@ class QuizCardPanel extends React.Component {
         }
         default: {
           return console.log(
-            "Неверно указан тип ответов!(single, multi, text, file)",
+            "Неверно указан тип ответов!(single, multi, input, file)",
           );
         }
       }
@@ -349,7 +349,7 @@ class QuizCardPanel extends React.Component {
                         </Checkbox>
                       </React.Fragment>
                     ))
-                  ) : item.type === "text" || item.type === "text" ? (
+                  ) : item.type === "input" || item.type === "text" ? (
                     <Input
                       size="s"
                       stretched={"true"}
