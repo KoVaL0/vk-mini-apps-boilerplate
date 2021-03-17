@@ -442,7 +442,7 @@ class QuizCardPanel extends React.Component {
                 size="s"
                 stretched={"true"}
                 onClick={() => this.handlerEnd()}
-                style={{ minHeight: "36px", marginBottom: "5px" }}
+                style={{ maxHeight: "36px", marginBottom: "5px" }}
               >
                 Забрать награду
               </Button>
@@ -450,7 +450,7 @@ class QuizCardPanel extends React.Component {
                 size="s"
                 stretched={"true"}
                 onClick={() => this.handlerEnd()}
-                style={{ minHeight: "36px" }}
+                style={{ maxHeight: "36px" }}
               >
                 Завершить
               </Button>
