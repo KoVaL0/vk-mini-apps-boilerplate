@@ -27,7 +27,7 @@ import { setQuiz } from "../store/data/actions";
 class QuizPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.id = window.location.hash.split("/")[2].split("?")[0];
+    this.id = this.props.activeQuiz || window.location.hash.split("/")[2].split("?")[0];
     this.state = {
       loading: false,
     };
