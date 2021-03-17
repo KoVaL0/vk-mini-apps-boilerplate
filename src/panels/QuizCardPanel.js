@@ -14,7 +14,7 @@ import {
   Input,
   File,
   Snackbar,
-  Title,
+  Title, PanelSpinner,
 } from "@vkontakte/vkui";
 import {
   setActiveAnswer,
@@ -259,11 +259,12 @@ class QuizCardPanel extends React.Component {
         >
           <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
         </PanelHeader>
+        {!this.props.loading ? (
         <div
           style={{
             background: `linear-gradient(
-              rgba(0, 0, 0, 0.7), 
-              rgba(0, 0, 0, 0.7)
+              rgba(0, 0, 0, 0.2), 
+              rgba(0, 0, 0, 0.2)
             )`
           }}
         >
@@ -456,6 +457,9 @@ class QuizCardPanel extends React.Component {
             </Div>
           </Gallery>
         </div>
+        ) : (
+          <PanelSpinner/>
+        )}
       </Panel>
     );
   }
@@ -471,6 +475,7 @@ const mapStateToProps = (state) => {
     notifications: state.data.notifications,
     profile: state.data.profile,
     balance: state.data.balance,
+    loading: state.data.loading,
   };
 };
 

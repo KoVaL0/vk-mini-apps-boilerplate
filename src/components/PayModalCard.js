@@ -61,11 +61,11 @@ class PayModalCard extends Component {
           return this.setState({phone: "+"})
         if (e.length === 2)
           return this.setState({phone: e + "("})
-        if (e.length === 5)
+        if (e.length === 6)
           return this.setState({phone: e + ")-"})
-        if (e.length === 10)
+        if (e.length === 11)
           return this.setState({phone: e + "-"})
-        if (e.length === 13)
+        if (e.length === 14)
           return this.setState({phone: e + "-"})
         this.setState({phone: e});
       } else {
@@ -93,7 +93,7 @@ class PayModalCard extends Component {
   handlerSubmit = () => {
     if (this.props.balance > 0) {
       if (this.state.activeValue === "phone") {
-        if (/^\+\d\(\d{2}\)-\d{3}-\d{2}-\d{2}$/.test(this.state.phone)) {
+        if (/^\+\d\(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(this.state.phone)) {
           this.pay(1, this.state.phone)
           this.props.router.popPage();
         } else {
@@ -111,7 +111,7 @@ class PayModalCard extends Component {
           );
         }
       } else if (this.state.activeValue === "qiwi") {
-        if (/\d{4}-\d{4}-\d{4}-\d{4}$/.test(this.state.phone)) {
+        if (/^\+\d\(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(this.state.phone)) {
           this.pay(2, this.state.phone)
           this.props.router.popPage();
         } else {
@@ -146,13 +146,13 @@ class PayModalCard extends Component {
               <Input
                 type="text"
                 value={this.state.phone}
-                maxLength="16"
+                maxLength="17"
                 placeholder={"Введите номер телефона"}
                 onChange={(e) => this.handlerChangePhone(e.target.value)}
               />
                : (this.state.activeValue === "qiwi") ? <Input
                   type="text"
-                  maxLength="16"
+                  maxLength="17"
                   value={this.state.phone}
                   placeholder={"Введите номер кошелька"}
                   onChange={(e) => this.handlerChangePhone(e.target.value)}

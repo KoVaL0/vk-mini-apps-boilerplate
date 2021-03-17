@@ -109,7 +109,7 @@ const initialState = {
       label: "Симферополь",
     },
   ],
-  loading: false,
+  loading: true,
   profile: {
     city: null,
     country: null,

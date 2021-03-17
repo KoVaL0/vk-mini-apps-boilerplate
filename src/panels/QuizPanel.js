@@ -8,7 +8,6 @@ import {
   Title,
   Button,
   Div,
-  CardGrid,
   ScreenSpinner,
   Placeholder,
 } from "@vkontakte/vkui";
