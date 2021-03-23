@@ -136,7 +136,7 @@ class PayModalCard extends Component {
       >
         <Div>
           <Text>
-            К выводу доступно {this.props.balance} баллов.
+            К выводу доступно {this.props.balance} баллов. 10 баллов = 1 рубль
           </Text>
           <FormItem top="Тип вывода">
             <Radio name="radio" value="phone" defaultChecked onClick={(e) => this.setState({activeValue: e.target.value})}>Телефон</Radio>
@@ -167,9 +167,7 @@ class PayModalCard extends Component {
             }
           </FormItem>
           <Text style={{marginBottom: "20px"}}>
-            Вывод средств будет
-            реализован через несколько месяцев. Все баллы за пройденные опросы
-            сохраняются, обменять их можно будет совсем скоро.
+            Вывод средств может занимать до 3 рабочих дней в зависимости от выбранного вами способа. Уточнить детали можно в поддержке rosopros2021@gmail.com
           </Text>
           <Button stretched onClick={() => this.handlerSubmit()}>
             Понятно

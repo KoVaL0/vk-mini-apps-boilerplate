@@ -56,8 +56,3 @@
   opacity: 0;
   transform: translateX(110%);
 }
-
-.Gallery__viewport {
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-}

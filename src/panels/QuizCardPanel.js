@@ -59,7 +59,7 @@ class QuizCardPanel extends React.Component {
       <Snackbar
         onClose={() => this.props.setSnackbar(null)}
         duration={2500}
-        before={<Icon16ErrorCircleFill width={24} height={24} />}
+        before={<Icon16ErrorCircleFill width={24} height={24}/>}
         onClick={() => this.props.setSnackbar(null)}
       >
         {text}
@@ -245,7 +245,7 @@ class QuizCardPanel extends React.Component {
   };
 
   render() {
-    const { id, router, } = this.props;
+    const { id, router } = this.props;
     return (
       <Panel id={id}>
         <PanelHeader
@@ -253,210 +253,214 @@ class QuizCardPanel extends React.Component {
           separator={false}
           left={
             <PanelHeaderButton onClick={() => router.pushPage(PAGE_MAIN)}>
-              <Icon24BrowserBack />
+              <Icon24BrowserBack/>
             </PanelHeaderButton>
           }
         >
-          <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
+          <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }}/>
         </PanelHeader>
         {!this.props.loading ? (
-        <div
-          style={{
-            background: `linear-gradient(
+          <div
+            style={{
+              background: `linear-gradient(
               rgba(0, 0, 0, 0.2), 
               rgba(0, 0, 0, 0.2)
             )`
-          }}
-        >
-          <Gallery
-            slideIndex={this.state.slideIndex}
-            slideWidth="100%"
-            align="right"
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundImage: `url(${(this.props.quiz?.questions[this.state.slideIndex]?.cover === undefined || this.props.quiz.questions[this.state.slideIndex].cover === "") ? (
-                  this.props.quiz.cover
-              ) : (
-                'https://rospoll.online/load/opt/' + this.props.quiz.questions[this.state.slideIndex].cover
-              )})`,
-              minHeight: `${window.innerHeight - 104}px`,
-              overflow: "hidden",
             }}
           >
-            {this.props.quiz.questions.map((item, quest_number) => (
-              <div style={{ padding: "20px 16px" }} key={quest_number}>
-                <Title
-                  level={"2"}
-                  weight={"heavy"}
-                  align={"center"}
+            <Gallery
+              slideIndex={this.state.slideIndex}
+              slideWidth="100%"
+              align="right"
+              style={{height: "100%", width: "100%"}}
+            >
+              {this.props.quiz.questions.map((item, quest_number) => (
+                <div
                   style={{
-                    color: "white",
-                    padding: "24px 0",
+                    padding: "0 16px",
                   }}
-                >
-                  {item.title}
+                  key={quest_number}>
+                  <Title
+                    level={"2"}
+                    weight={"heavy"}
+                    align={"center"}
+                    style={{
+                      color: "black",
+                      padding: "10px",
+                    }}
+                  >
+                    {item.title}
+                  </Title>
+                  <div
+                    className={"quiz-image"}
+                    style={{
+                      height: "150px",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundImage: `url(${(this.props.quiz?.questions[this.state.slideIndex]?.cover === undefined || this.props.quiz.questions[this.state.slideIndex].cover === "") ? (
+                        this.props.quiz.cover
+                      ) : (
+                        'https://rospoll.online/load/opt/' + this.props.quiz.questions[this.state.slideIndex].cover
+                      )})`,
+                    }}>
+                  </div>
+                  <Group>
+                    {item.type === "single" ? (
+                      item.answers.map((answer, i) => (
+                        <React.Fragment key={i}>
+                          <Button
+                            size="s"
+                            mode={
+                              this.props.activeAnswer === i
+                                ? "commerce"
+                                : "overlay_primary"
+                            }
+                            stretched={"true"}
+                            style={{
+                              marginBottom: "10px",
+                              minHeight: "36px",
+                              border: "1px #4986cc",
+                              color: "#000000",
+                            }}
+                            onClick={() => this.handlerChangeSingle(i, answer)}
+                          >
+                            <Text>{answer.answer}</Text>
+                          </Button>
+                        </React.Fragment>
+                      ))
+                    ) : item.type === "multi" ? (
+                      item.answers.map((answer, i) => (
+                        <React.Fragment key={i}>
+                          <Checkbox
+                            stretched={"true"}
+                            mode={
+                              this.props.activeAnswer === i
+                                ? "commerce"
+                                : "overlay_primary"
+                            }
+                            style={{
+                              marginBottom: "10px",
+                              minHeight: "36px",
+                              border: "1px solid #4986cc",
+                              borderRadius: "10px",
+                            }}
+                            onChange={(e) =>
+                              this.handlerChangeMulti(e.target.checked, i)
+                            }
+                          >
+                            <Text style={{color: "#000000"}}>{answer.answer}</Text>
+                          </Checkbox>
+                        </React.Fragment>
+                      ))
+                    ) : item.type === "input" || item.type === "text" ? (
+                      <Input
+                        size="s"
+                        stretched={"true"}
+                        style={{
+                          marginBottom: "10px",
+                          minHeight: "36px",
+                          color: "#000000",
+                        }}
+                        onChange={(e) => this.handlerChangeInput(e.target.value)}
+                        placeholder={item.title}
+                      />
+                    ) : item.type === "file" ? (
+                      <File
+                        before={<Icon24Document/>}
+                        stretched={"true"}
+                        size="s"
+                        mode={
+                          this.props.activeAnswer === 0
+                            ? "commerce"
+                            : "overlay_primary"
+                        }
+                        style={{
+                          marginBottom: "10px",
+                          minHeight: "36px",
+                          color: "#000000",
+                        }}
+                        onChange={(e) =>
+                          this.handlerChangeFile(e.target.files[0])
+                        }
+                      >
+                        <Text>Загрузите файл</Text>
+                      </File>
+                    ) : item.type === "end" ? (
+                      <Title
+                        level={"3"}
+                        weight={"heavy"}
+                        align={"center"}
+                        style={{
+                          color: "black",
+                          background: "#fff",
+                          margin: "0 80px",
+                          padding: "10px 0",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        {item.answer}
+                      </Title>
+                    ) : null}
+                  </Group>
+
+                  <Button
+                    size="s"
+                    stretched={"true"}
+                    onClick={() => this.handlerClickNext(quest_number, item.type)}
+                    style={{
+                      minHeight: "36px",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    <div className="d-flex align-center">
+                      Продолжить{" "}
+                      <Icon24ArrowRightOutline style={{marginLeft: "8px"}}/>
+                    </div>
+                  </Button>
+                </div>
+              ))}
+              <Div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <img
+                  alt={"coin"}
+                  src={moneyBag}
+                  style={{width: "100px", margin: "20px"}}
+                />
+                <Title level={"1"} align={"center"} style={{color: "#ffffff"}}>
+                  {this.props.quiz.outro}
                 </Title>
-
-                <Group>
-                  {item.type === "single" ? (
-                    item.answers.map((answer, i) => (
-                      <React.Fragment key={i}>
-                        <Button
-                          size="s"
-                          mode={
-                            this.props.activeAnswer === i
-                              ? "commerce"
-                              : "overlay_primary"
-                          }
-                          stretched={"true"}
-                          style={{
-                            marginBottom: "10px",
-                            minHeight: "36px",
-                            border: "1px #4986cc",
-                            color: "#000000",
-                          }}
-                          onClick={() => this.handlerChangeSingle(i, answer)}
-                        >
-                          <Text>{answer.answer}</Text>
-                        </Button>
-                      </React.Fragment>
-                    ))
-                  ) : item.type === "multi" ? (
-                    item.answers.map((answer, i) => (
-                      <React.Fragment key={i}>
-                        <Checkbox
-                          stretched={"true"}
-                          mode={
-                            this.props.activeAnswer === i
-                              ? "commerce"
-                              : "overlay_primary"
-                          }
-                          style={{
-                            marginBottom: "10px",
-                            minHeight: "36px",
-                            border: "1px solid #4986cc",
-                            color: "#000000",
-                            borderRadius: "10px",
-                          }}
-                          onChange={(e) =>
-                            this.handlerChangeMulti(e.target.checked, i)
-                          }
-                        >
-                          <Text>{answer.answer}</Text>
-                        </Checkbox>
-                      </React.Fragment>
-                    ))
-                  ) : item.type === "input" || item.type === "text" ? (
-                    <Input
-                      size="s"
-                      stretched={"true"}
-                      style={{
-                        marginBottom: "10px",
-                        minHeight: "36px",
-                        color: "#000000",
-                      }}
-                      onChange={(e) => this.handlerChangeInput(e.target.value)}
-                      placeholder={item.title}
-                    />
-                  ) : item.type === "file" ? (
-                    <File
-                      before={<Icon24Document />}
-                      stretched={"true"}
-                      size="s"
-                      mode={
-                        this.props.activeAnswer === 0
-                          ? "commerce"
-                          : "overlay_primary"
-                      }
-                      style={{
-                        marginBottom: "10px",
-                        minHeight: "36px",
-                        color: "#000000",
-                      }}
-                      onChange={(e) =>
-                        this.handlerChangeFile(e.target.files[0])
-                      }
-                    >
-                      <Text>Загрузите файл</Text>
-                    </File>
-                  ) : item.type === "end" ? (
-                    <Title
-                      level={"3"}
-                      weight={"heavy"}
-                      align={"center"}
-                      style={{
-                        color: "black",
-                        background: "#fff",
-                        margin: "0 80px",
-                        padding: "10px 0",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      {item.answer}
-                    </Title>
-                  ) : null}
-                </Group>
-
+                <Title
+                  level={"3"}
+                  align={"center"}
+                  style={{color: "#ffffff", margin: "20px"}}
+                >
+                  Ваша награда {this.props.quiz.award} баллов
+                </Title>
                 <Button
                   size="s"
                   stretched={"true"}
-                  onClick={() => this.handlerClickNext(quest_number, item.type)}
-                  style={{
-                    minHeight: "36px",
-                  }}
+                  onClick={() => this.handlerEnd()}
+                  style={{maxHeight: "36px", marginBottom: "5px"}}
                 >
-                  <div className="d-flex align-center">
-                    Продолжить{" "}
-                    <Icon24ArrowRightOutline style={{ marginLeft: "8px" }} />
-                  </div>
+                  Забрать награду
                 </Button>
-              </div>
-            ))}
-            <Div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <img
-                alt={"coin"}
-                src={moneyBag}
-                style={{ width: "100px", margin: "20px" }}
-              />
-              <Title level={"1"} align={"center"} style={{ color: "#ffffff" }}>
-                {this.props.quiz.outro}
-              </Title>
-              <Title
-                level={"3"}
-                align={"center"}
-                style={{ color: "#ffffff", margin: "20px" }}
-              >
-                Ваша награда {this.props.quiz.award} баллов
-              </Title>
-              <Button
-                size="s"
-                stretched={"true"}
-                onClick={() => this.handlerEnd()}
-                style={{ maxHeight: "36px", marginBottom: "5px" }}
-              >
-                Забрать награду
-              </Button>
-              <Button
-                size="s"
-                stretched={"true"}
-                onClick={() => this.handlerEnd()}
-                style={{ maxHeight: "36px" }}
-              >
-                Завершить
-              </Button>
-            </Div>
-          </Gallery>
-        </div>
+                <Button
+                  size="s"
+                  stretched={"true"}
+                  onClick={() => this.handlerEnd()}
+                  style={{maxHeight: "36px"}}
+                >
+                  Завершить
+                </Button>
+              </Div>
+            </Gallery>
+          </div>
         ) : (
           <PanelSpinner/>
         )}
