@@ -23,6 +23,7 @@
 
 .Gallery__slide > * {
   width: auto !important;
+  height: unset !important;
 }
 .align-cetner {
   align-items: center;
@@ -32,4 +33,8 @@
   max-height: 36px;
   margin-bottom: 5px;
   margin-right: 8px;
+}
+
+.Gallery__slide {
+  overflow-y: scroll;
 }

@@ -75,7 +75,13 @@ class Home extends React.Component {
             </PanelHeaderButton>
           }
         >
-          <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
+          <img
+            async
+            alt="logo"
+            src={logo}
+            height={36}
+            style={{ margin: "0 auto" }}
+          />
         </PanelHeader>
         {Boolean(!this.props.notifications) && (
           <Div className={`notification ${!notifications ? "show" : "hide"}`}>

@@ -262,14 +262,7 @@ class QuizCardPanel extends React.Component {
           <img alt="logo" src={logo} height={36} style={{ margin: "0 auto" }} />
         </PanelHeader>
         {!this.props.loading ? (
-          <div
-            style={{
-              background: `linear-gradient(
-              rgba(0, 0, 0, 0.2), 
-              rgba(0, 0, 0, 0.2)
-            )`,
-            }}
-          >
+          <div>
             <Gallery
               slideIndex={this.state.slideIndex}
               slideWidth="100%"
@@ -323,7 +316,7 @@ class QuizCardPanel extends React.Component {
                               style={{
                                 marginBottom: "10px",
                                 minHeight: "36px",
-                                border: "1px #4986cc",
+                                border: "1px solid #4986cc",
                                 color: "#000000",
                               }}
                               onClick={() =>
@@ -442,20 +435,12 @@ class QuizCardPanel extends React.Component {
                 <img
                   alt={"coin"}
                   src={moneyBag}
-                  style={{ width: "100px", margin: "20px" }}
+                  style={{ width: "70px", margin: "20px" }}
                 />
-                <Title
-                  level={"1"}
-                  align={"center"}
-                  style={{ color: "#ffffff" }}
-                >
+                <Title level={"1"} align={"center"}>
                   {this.props.quiz.outro}
                 </Title>
-                <Title
-                  level={"3"}
-                  align={"center"}
-                  style={{ color: "#ffffff", margin: "20px" }}
-                >
+                <Title level={"3"} align={"center"} style={{ margin: "20px" }}>
                   Ваша награда {this.props.quiz.award} баллов
                 </Title>
 
