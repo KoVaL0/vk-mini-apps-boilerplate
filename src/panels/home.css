@@ -56,3 +56,12 @@
   opacity: 0;
   transform: translateX(110%);
 }
+
+.Gallery__viewport {
+  height: calc(100vh - var(--tabbar_height) - 56px) !important;
+}
+.FormItem {
+  padding: unset !important;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}

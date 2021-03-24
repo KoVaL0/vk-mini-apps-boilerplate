@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 import { withRouter } from "@happysanta/router";
 import { connect } from "react-redux";
+import { setBalance, setSnackbar } from "../store/data/actions";
+import { bindActionCreators } from "redux";
 import {
-  setBalance,
-  setSnackbar,
-} from "../store/data/actions";
-import { bindActionCreators} from "redux";
-import { Button, Div, FormItem, Input, ModalCard, Radio, Snackbar, Text } from "@vkontakte/vkui";
-import { Icon20CheckCircleFillGreen, Icon16ErrorCircleFill } from "@vkontakte/icons";
+  Button,
+  Caption,
+  Div,
+  FormItem,
+  Input,
+  ModalCard,
+  Radio,
+  Snackbar,
+  Text,
+} from "@vkontakte/vkui";
+import {
+  Icon20CheckCircleFillGreen,
+  Icon16ErrorCircleFill,
+} from "@vkontakte/icons";
 import { withdrawal } from "../api/rest/withdrawal";
 
 class PayModalCard extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +29,7 @@ class PayModalCard extends Component {
       card: "",
       month: "",
       year: "",
-    }
+    };
   }
 
   snackBar = (text) => {
@@ -28,7 +37,7 @@ class PayModalCard extends Component {
       <Snackbar
         onClose={() => this.props.setSnackbar(null)}
         duration={2500}
-        before={<Icon16ErrorCircleFill width={24} height={24}/>}
+        before={<Icon16ErrorCircleFill width={24} height={24} />}
         onClick={() => this.props.setSnackbar(null)}
       >
         {text}
@@ -44,57 +53,49 @@ class PayModalCard extends Component {
           <Snackbar
             onClose={() => this.props.setSnackbar(null)}
             duration={2500}
-            before={<Icon20CheckCircleFillGreen width={24} height={24}/>}
+            before={<Icon20CheckCircleFillGreen width={24} height={24} />}
             onClick={() => this.props.setSnackbar(null)}
           >
             Поздравляем! Баллы успешно выведены!
-          </Snackbar>
+          </Snackbar>,
         );
       })
-      .catch(e => console.log(e));
-  }
+      .catch((e) => console.log(e));
+  };
 
   handlerChangePhone = (e) => {
     if (/[0-9]|-|\(|\)|\+$/.test(e)) {
       if (e.length > this.state.phone.length) {
-        if (/^$/.test(this.state.phone))
-          return this.setState({phone: "+"})
-        if (e.length === 2)
-          return this.setState({phone: e + "("})
-        if (e.length === 6)
-          return this.setState({phone: e + ")-"})
-        if (e.length === 11)
-          return this.setState({phone: e + "-"})
-        if (e.length === 14)
-          return this.setState({phone: e + "-"})
-        this.setState({phone: e});
+        if (/^$/.test(this.state.phone)) return this.setState({ phone: "+" });
+        if (e.length === 2) return this.setState({ phone: e + "(" });
+        if (e.length === 6) return this.setState({ phone: e + ")-" });
+        if (e.length === 11) return this.setState({ phone: e + "-" });
+        if (e.length === 14) return this.setState({ phone: e + "-" });
+        this.setState({ phone: e });
       } else {
-        this.setState({phone: e});
+        this.setState({ phone: e });
       }
     }
-  }
+  };
 
   handlerChangeCard = (e) => {
     if (/\d*$/.test(e)) {
       if (e.length > this.state.card.length) {
-        if (e.length === 4)
-          return this.setState({card: e + "-"})
-        if (e.length === 9)
-          return this.setState({card: e + "-"})
-        if (e.length === 14)
-          return this.setState({card: e + "-"})
-        this.setState({card: e});
+        if (e.length === 4) return this.setState({ card: e + "-" });
+        if (e.length === 9) return this.setState({ card: e + "-" });
+        if (e.length === 14) return this.setState({ card: e + "-" });
+        this.setState({ card: e });
       } else {
-        this.setState({card: e});
+        this.setState({ card: e });
       }
     }
-  }
+  };
 
   handlerSubmit = () => {
     if (this.props.balance > 0) {
       if (this.state.activeValue === "phone") {
         if (/^\+\d\(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(this.state.phone)) {
-          this.pay(1, this.state.phone)
+          this.pay(1, this.state.phone);
           this.props.router.popPage();
         } else {
           this.props.setSnackbar(
@@ -103,7 +104,7 @@ class PayModalCard extends Component {
         }
       } else if (this.state.activeValue === "card") {
         if (/\d{4}-\d{4}-\d{4}-\d{4}$/.test(this.state.card)) {
-          this.pay(3, this.state.card)
+          this.pay(3, this.state.card);
           this.props.router.popPage();
         } else {
           this.props.setSnackbar(
@@ -112,7 +113,7 @@ class PayModalCard extends Component {
         }
       } else if (this.state.activeValue === "qiwi") {
         if (/^\+\d\(\d{3}\)-\d{3}-\d{2}-\d{2}$/.test(this.state.phone)) {
-          this.pay(2, this.state.phone)
+          this.pay(2, this.state.phone);
           this.props.router.popPage();
         } else {
           this.props.setSnackbar(
@@ -121,11 +122,9 @@ class PayModalCard extends Component {
         }
       }
     } else {
-      this.props.setSnackbar(
-        this.snackBar("Не хватает для вывода средств!")
-      );
+      this.props.setSnackbar(this.snackBar("Не хватает для вывода средств!"));
     }
-  }
+  };
 
   render() {
     return (
@@ -136,13 +135,34 @@ class PayModalCard extends Component {
       >
         <Div>
           <Text>
-            К выводу доступно {this.props.balance} баллов. 10 баллов = 1 рубль
+            К выводу доступно {this.props.balance} баллов. <br /> 10 баллов = 1
+            рубль
           </Text>
-          <FormItem top="Тип вывода">
-            <Radio name="radio" value="phone" defaultChecked onClick={(e) => this.setState({activeValue: e.target.value})}>Телефон</Radio>
-            <Radio name="radio" value="qiwi" onClick={(e) => this.setState({activeValue: e.target.value})}>QIWI</Radio>
-            <Radio name="radio" value="card" onClick={(e) => this.setState({activeValue: e.target.value})} style={{marginBottom: "20px"}}>Номер карты</Radio>
-            {this.state.activeValue === "phone" ?
+          <FormItem style={{ padding: "0 !important" }} top="Тип вывода">
+            <Radio
+              name="radio"
+              value="phone"
+              defaultChecked
+              onClick={(e) => this.setState({ activeValue: e.target.value })}
+            >
+              Телефон
+            </Radio>
+            <Radio
+              name="radio"
+              value="qiwi"
+              onClick={(e) => this.setState({ activeValue: e.target.value })}
+            >
+              QIWI
+            </Radio>
+            <Radio
+              name="radio"
+              value="card"
+              onClick={(e) => this.setState({ activeValue: e.target.value })}
+              style={{ marginBottom: "20px" }}
+            >
+              Номер карты
+            </Radio>
+            {this.state.activeValue === "phone" ? (
               <Input
                 type="text"
                 value={this.state.phone}
@@ -150,27 +170,31 @@ class PayModalCard extends Component {
                 placeholder={"Введите номер телефона"}
                 onChange={(e) => this.handlerChangePhone(e.target.value)}
               />
-               : (this.state.activeValue === "qiwi") ? <Input
-                  type="text"
-                  maxLength="17"
-                  value={this.state.phone}
-                  placeholder={"Введите номер кошелька"}
-                  onChange={(e) => this.handlerChangePhone(e.target.value)}
-                /> : <Input
+            ) : this.state.activeValue === "qiwi" ? (
+              <Input
+                type="text"
+                maxLength="17"
+                value={this.state.phone}
+                placeholder={"Введите номер кошелька"}
+                onChange={(e) => this.handlerChangePhone(e.target.value)}
+              />
+            ) : (
+              <Input
                 type="text"
                 maxLength="19"
                 value={this.state.card}
                 placeholder={"Введите номер карты"}
                 onChange={(e) => this.handlerChangeCard(e.target.value)}
               />
-
-            }
+            )}
           </FormItem>
-          <Text style={{marginBottom: "20px"}}>
-            Вывод средств может занимать до 3 рабочих дней в зависимости от выбранного вами способа. Уточнить детали можно в поддержке rosopros2021@gmail.com
-          </Text>
+          <Caption level={1} style={{ marginBottom: "20px" }}>
+            Вывод средств может занимать до 3 рабочих дней в зависимости от
+            выбранного вами способа. Уточнить детали можно в поддержке <br />
+            rosopros2021@gmail.com
+          </Caption>
           <Button stretched onClick={() => this.handlerSubmit()}>
-            Понятно
+            Запросить вывод
           </Button>
         </Div>
       </ModalCard>
@@ -187,10 +211,13 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
-    ...bindActionCreators({
-      setSnackbar,
-      setBalance,
-    }, dispatch),
+    ...bindActionCreators(
+      {
+        setSnackbar,
+        setBalance,
+      },
+      dispatch,
+    ),
   };
 }
 

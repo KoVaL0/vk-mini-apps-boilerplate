@@ -6,6 +6,19 @@
   font-weight: bold;
   font-size: 20px;
   color: dodgerblue;
+  min-height: "150px";
+  background-repeat: "no-repeat";
+  background-size: "cover";
+  background-position: "center";
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.quiz-image .Title {
+  margin: auto;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
 }
 
 .Gallery__slide > * {
@@ -13,4 +26,10 @@
 }
 .align-cetner {
   align-items: center;
+}
+
+.quiz__end-button {
+  max-height: 36px;
+  margin-bottom: 5px;
+  margin-right: 8px;
 }
