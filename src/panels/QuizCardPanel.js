@@ -49,11 +49,7 @@ class QuizCardPanel extends React.Component {
     this.input = "";
     this.single = "";
     this.file = null;
-    this.answerMulti = {
-      first: false,
-      second: false,
-      third: false,
-    };
+    this.answerMulti = [];
   }
 
   snackBar = (text) => {
@@ -82,37 +78,10 @@ class QuizCardPanel extends React.Component {
 
   zeroing = () => {
     this.answer = null;
-    this.answerMulti = {
-      first: false,
-      second: false,
-      third: false,
-    };
+    this.answerMulti = [];
     this.input = "";
     this.file = null;
     this.single = "";
-  };
-
-  answerMultiArr = () => {
-    const arr = [];
-    for (let key in this.answerMulti) {
-      if (this.answerMulti[key]) {
-        switch (key) {
-          case "first": {
-            arr.push(1);
-            break;
-          }
-          case "second": {
-            arr.push(2);
-            break;
-          }
-          case "third": {
-            arr.push(3);
-            break;
-          }
-        }
-      }
-    }
-    return arr;
   };
 
   responseAnswer = (type, i) => {
@@ -127,7 +96,7 @@ class QuizCardPanel extends React.Component {
         return [this.file.data.split("base64,")[1], this.file.name];
       }
       case "multi": {
-        return [this.answerMultiArr()];
+        return [this.answerMulti];
       }
       default: {
         return console.log(
@@ -138,18 +107,17 @@ class QuizCardPanel extends React.Component {
   };
 
   checkAnswer = (i, type) => {
-    if (
-      type === "multi" &&
-      (this.answerMulti.first ||
-        this.answerMulti.second ||
-        this.answerMulti.third)
-    ) {
-      this.responseAnswer("multi", i);
+    if (type === "multi" && this.answerMulti.length !== 0) {
       this.setState({ slideIndex: this.state.slideIndex + 1 });
+      this.responseAnswer(type, i);
     } else if (type !== "multi") {
       this.setState({ slideIndex: this.state.slideIndex + 1 });
       this.responseAnswer(type, i);
-    } else return console.log("Нет ответа!");
+    } else {
+      this.props.setSnackbar(
+        this.snackBar("Выберите один, либо несколько вариатов ответа!"),
+      );
+    }
   };
 
   handlerClickNext = (i, type) => {
@@ -213,25 +181,11 @@ class QuizCardPanel extends React.Component {
     this.single = answer.id;
   };
 
-  handlerChangeMulti = (checked, id) => {
+  handlerChangeMulti = (id) => {
     this.answer = true;
-    if (checked) {
-      if (id === 0) {
-        this.answerMulti.first = true;
-      } else if (id === 1) {
-        this.answerMulti.second = true;
-      } else if (id === 2) {
-        this.answerMulti.third = true;
-      }
-    } else {
-      if (id === 0) {
-        this.answerMulti.first = false;
-      } else if (id === 1) {
-        this.answerMulti.second = false;
-      } else if (id === 2) {
-        this.answerMulti.third = false;
-      }
-    }
+    if (this.answerMulti.includes(id)) {
+      this.answerMulti = this.answerMulti.filter(answer => answer !== id)
+    } else this.answerMulti.push(id);
   };
 
   handlerChangeFile = (e) => {
@@ -344,7 +298,7 @@ class QuizCardPanel extends React.Component {
                                 borderRadius: "10px",
                               }}
                               onChange={(e) =>
-                                this.handlerChangeMulti(e.target.checked, i)
+                                this.handlerChangeMulti(i)
                               }
                             >
                               <Text>{answer.answer}</Text>
